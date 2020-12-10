@@ -1,0 +1,6 @@
+<div class="p-field">
+  <label [for]="property">{{header}}</label>
+  <input [id]="id" [type]="type" [class.p-invalid]="isValid === false"
+    [class.m-valid]="isValid" [ngModel]="property" (ngModelChange)="validator($event)" pInputText />
+  <small *ngIf="!isValid" class="p-invalid">{{comment}}</small>
+</div>
