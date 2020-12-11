@@ -1,12 +1,8 @@
 import { Injectable } from '@angular/core';
-
-//import * as countries_data from '../../assets/dictionares/countries.json';
 import { Country } from '../models/Country';
 
 // @ts-ignore
 import { countries } from 'country-code-lookup';
-
-// const countries_data2 = require('country-code-lookup');
 
 class CountryRaw {
   continent: string;
