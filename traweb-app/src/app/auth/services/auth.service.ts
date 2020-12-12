@@ -9,6 +9,7 @@ import { Functions } from 'src/app/shared/constants/Functions';
 import { LoginResponse } from '../models/LoginResponse';
 import { UserLogin } from '../models/UserLogin';
 import { UserRegister } from '../models/UserRegister';
+import { NgSimpleSidebarService } from 'ng-simple-sidebar';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private sidebarService: NgSimpleSidebarService
   ) { }
 
   register(userRegister: UserRegister): Observable<User> {
@@ -41,6 +43,7 @@ export class AuthService {
       map(response => Functions.getCamelCaseJSON(response)),
       tap(response => {
         localStorage.setItem(Constants.LOCAL_STORAGE_AUTH_TOKEN, response.authToken);
+        this.router.navigate(['/home']);
       }),
       catchError(error => {
         console.log(error);
@@ -54,12 +57,15 @@ export class AuthService {
     .pipe(
       tap(response => {
         localStorage.removeItem(Constants.LOCAL_STORAGE_AUTH_TOKEN);
-        this.router.navigate(['/login']);
       }),
       catchError(error => {
         console.log(error);
         return throwError(Functions.getErrorMessage(error));
       })
     );
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem(Constants.LOCAL_STORAGE_AUTH_TOKEN);
   }
 }

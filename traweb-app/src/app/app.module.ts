@@ -21,7 +21,7 @@ import { MessageService } from 'primeng/api';
 import { TokenInterceptor } from './interceptors/token.interceptor';
 import { BodyInterceptor } from './interceptors/body.interceptor';
 import { HomeComponent } from './home/home.component';
-import { SideBarComponent } from './side-bar/side-bar.component';
+import { NgSimpleSidebarModule } from 'ng-simple-sidebar';
 
 
 @NgModule({
@@ -31,8 +31,7 @@ import { SideBarComponent } from './side-bar/side-bar.component';
     RegisterComponent,
     FlagImagePipe,
     InputWithValidatorComponent,
-    HomeComponent,
-    SideBarComponent
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +44,8 @@ import { SideBarComponent } from './side-bar/side-bar.component';
     FormsModule,
     TooltipModule,
     HttpClientModule,
-    ToastModule
+    ToastModule,
+    NgSimpleSidebarModule
   ],
   providers: [MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

@@ -25,3 +25,28 @@
   /*-webkit-filter: grayscale(100%);*/ /* Safari 6.0 - 9.0 */
   /*filter: grayscale(100%);*/
 }
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.m-content-wrapper {
+	display: flex;
+  flex-wrap: nowrap;
+  width: 100%;
+  height: 100%;
+}
+
+.m-content {
+  align-items: flex-start;
+  flex-wrap: wrap;
+  padding: 20px;
+  width: 100%;
+  height: 100%;
+}
+
+:host ::ng-deep .m-side-bar .dock {
+  min-width: 60px;
+  height: auto !important;
+}
