@@ -10,8 +10,6 @@ $ cd traweb-app
 
 $ npm install
 
-$ (optional) ng build
-
 $ ng serve
 
 ## Development server
