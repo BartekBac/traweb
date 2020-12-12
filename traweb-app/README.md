@@ -5,9 +5,13 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## First develop run
 
 $ git clone https://github.com/BartekBac/traweb.git
+
 $ cd traweb-app
+
 $ npm install
+
 $ (optional) ng build
+
 $ ng serve
 
 ## Development server
