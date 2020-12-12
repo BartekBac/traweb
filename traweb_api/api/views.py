@@ -1,13 +1,13 @@
 from rest_framework import viewsets
-from . import models
-from . import serializers
+from .models import User
+from .serializers import UserSerializer
 from .permissions import IsOwnedUserModel
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 
 class UserViewset(viewsets.ModelViewSet):
-    queryset = models.User.objects.all()
-    serializer_class = serializers.UserSerializer
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
     def get_permissions(self):
         if self.request.method == 'POST':

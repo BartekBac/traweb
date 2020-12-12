@@ -18,7 +18,10 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlagImagePipe } from './pipes/flag-image.pipe';
 import { InputWithValidatorComponent } from './shared/components/input-with-validator/input-with-validator.component';
 import { MessageService } from 'primeng/api';
-import { TokenInterceptor } from './shared/interceptors/token.interceptor';
+import { TokenInterceptor } from './interceptors/token.interceptor';
+import { BodyInterceptor } from './interceptors/body.interceptor';
+import { HomeComponent } from './home/home.component';
+import { SideBarComponent } from './side-bar/side-bar.component';
 
 
 @NgModule({
@@ -27,7 +30,9 @@ import { TokenInterceptor } from './shared/interceptors/token.interceptor';
     LoginComponent,
     RegisterComponent,
     FlagImagePipe,
-    InputWithValidatorComponent
+    InputWithValidatorComponent,
+    HomeComponent,
+    SideBarComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +48,9 @@ import { TokenInterceptor } from './shared/interceptors/token.interceptor';
     ToastModule
   ],
   providers: [MessageService,
-    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },],
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: BodyInterceptor, multi: true }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
