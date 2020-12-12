@@ -2,6 +2,11 @@
 <div class="m-background">
   <div class="m-visible-area">
     <img class="m-background-img" src="assets/images/background.jpg">
-      <router-outlet></router-outlet>
+    <div class="m-content-wrapper">
+      <lib-ng-simple-sidebar class="m-side-bar" [ngStyle]="{'display': showSidebar() ? 'flex' : 'none'}"></lib-ng-simple-sidebar>
+      <div class="m-content">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
   </div>
 </div>

@@ -21,7 +21,11 @@ export class LoginComponent implements OnInit {
     private toastService: MessageService
   ) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.authService.isAuthenticated()) {
+      this.logout();
+    }
+  }
 
   submit(): void {
     this.authService.login(this.userLogin).subscribe(
@@ -30,11 +34,11 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  /*logout(): void {
+  private logout(): void {
     this.authService.logout().subscribe(
       res => this.toastService.add({severity: 'success', summary: 'Logging out', detail: 'See you soon!'}),
       err => this.toastService.add({severity: 'error', summary: 'Logout failed', detail: err, life: 10000})
     );
-  }*/
+  }
 
 }
