@@ -14,10 +14,11 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlagImagePipe } from './pipes/flag-image.pipe';
 import { InputWithValidatorComponent } from './shared/components/input-with-validator/input-with-validator.component';
 import { MessageService } from 'primeng/api';
+import { TokenInterceptor } from './shared/interceptors/token.interceptor';
 
 
 @NgModule({
@@ -41,7 +42,8 @@ import { MessageService } from 'primeng/api';
     HttpClientModule,
     ToastModule
   ],
-  providers: [MessageService],
+  providers: [MessageService,
+    { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -7,6 +7,9 @@ import { CountriesService } from 'src/app/services/countries.service';
 import { ValidationStep } from 'src/app/shared/components/input-with-validator/ValidationStep';
 import { MessageService } from 'primeng/api';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { UserRegister } from '../models/UserRegister';
+import { Functions } from 'src/app/shared/constants/Functions';
 
 @Component({
   selector: 'app-register',
@@ -74,7 +77,9 @@ export class RegisterComponent implements OnInit {
     private countriesService: CountriesService,
     private citiesService: CitiesService,
     private messageService: MessageService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService,
+    private toastService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -166,6 +171,20 @@ export class RegisterComponent implements OnInit {
         life: 12000,
         closable: true
       });
+    } else {
+      const userRegister: UserRegister = {
+        email: this.email,
+        password: this.password,
+        firstName: this.firstName,
+        lastName: this.lastName,
+        country: this.selectedCountry.name,
+        city: this.selectedCity.name,
+        zipCode: this.selectedZipCode
+      }
+      this.authService.register(userRegister).subscribe(
+        res => this.toastService.add({severity: 'success', summary: 'Register succeeded', detail: 'Redirecting to login page...'}),
+        err => this.toastService.add({severity: 'error', summary: 'Register failed', detail: err, life: 10000})
+      );
     }
   }
 

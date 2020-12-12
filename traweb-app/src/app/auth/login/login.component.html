@@ -1,3 +1,5 @@
+<p-toast></p-toast>
+
 <div class="p-grid m-container p-ai-center vertical-container">
   <div class="p-col-4 p-offset-4">
     <p-card>
@@ -10,15 +12,15 @@
           </div>
           <div class="p-field">
             <label for="login">E-mail</label>
-            <input id="login" type="text" pInputText>
+            <input id="login" [(ngModel)]="userLogin.username" type="text" pInputText>
           </div>
           <div class="p-field">
             <label for="password">Password</label>
-            <input id="password" type="text" pInputText>
+            <input id="password" [(ngModel)]="userLogin.password" type="password" pInputText>
           </div>
           <br>
           <div class="p-field">
-            <button pButton pRipple type="button" label="Log In" class="p-button-rounded"></button>
+            <button pButton pRipple type="button" label="Log In" class="p-button-rounded" (click)="submit()"></button>
           </div>
           <br>
           <br>

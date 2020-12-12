@@ -22,7 +22,6 @@ export class InputWithValidatorComponent implements OnInit {
   ngOnInit(): void {}
 
   validator(property: string): void {
-    console.log('validation triggered');
     this.property = property;
     this.propertyChange.emit(property);
     this.comment = '';
