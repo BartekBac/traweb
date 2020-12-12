@@ -6,8 +6,8 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Constants } from '../constants/Constants';
-import { Functions } from '../constants/Functions';
+import { Constants } from '../shared/constants/Constants';
+import { Functions } from '../shared/constants/Functions';
 
 @Injectable()
 export class TokenInterceptor implements HttpInterceptor {
@@ -23,10 +23,6 @@ export class TokenInterceptor implements HttpInterceptor {
           headers = headers.append('Accept', 'application/json');
           headers = headers.append('Content-Type', 'application/json');
           request = request.clone({headers});
-        }
-        // convert request body to snake_case if posted
-        if (request.body !== null) {
-          request = request.clone({body: Functions.getSnakeCaseJSON(request.body)});
         }
         return next.handle(request);
   }

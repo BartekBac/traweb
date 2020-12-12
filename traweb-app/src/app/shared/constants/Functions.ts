@@ -26,15 +26,6 @@ export class Functions {
 
   public static getCamelCaseJSON(json: any): any {
     return this.convertJsonKeys(json, Functions.toCamelCase);
-    /*let rawJson = '{';
-    Object.keys(json).forEach((key) => {
-      rawJson += `"${Functions.toCamelCase(key)}": "${json[key]}", `;
-    });
-    if (rawJson.length > 1) {
-      rawJson = rawJson.slice(0, -2);
-    }
-    rawJson += '}';
-    return JSON.parse(rawJson);*/
   }
 
   public static getSnakeCaseJSON(json: any): any {
