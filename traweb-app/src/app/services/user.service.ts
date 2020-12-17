@@ -1,8 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, map } from 'rxjs/internal/operators';
 import { User } from '../models/User';
 import { Constants } from '../shared/constants/Constants';
+import { Functions } from '../shared/constants/Functions';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +17,17 @@ export class UserService {
 
   getUser(id: number): Observable<User> {
     return this.http.get<User>(this.baseUrl + id);
+  }
+
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>(this.baseUrl + 'current')
+      .pipe(
+        map(res => Functions.getCamelCaseJSON(res)),
+        catchError(error => {
+          console.log(error);
+          return throwError(Functions.getErrorMessage(error));
+        })
+    );
   }
 
 }

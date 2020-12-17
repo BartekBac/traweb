@@ -50,3 +50,7 @@ html, body {
   min-width: 60px;
   height: auto !important;
 }
+
+:host ::ng-deep .m-side-bar .menu-item {
+  margin-bottom: 12px;
+}
