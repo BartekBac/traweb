@@ -4,7 +4,20 @@
   </p-header>
   <p-accordion>
     <p-accordionTab header="Travel positions">
-       Content 1
+      <p-carousel [ngClass]="travelPositionsView.length < 3 ? 'm-hidden-indicators': 'm-indicators'" [value]="travelPositionsView" [numVisible]="3" [numScroll]="2">
+        <ng-template let-tarvelPosition pTemplate="item">
+          <div *ngIf="tarvelPosition.name === 'add-new'; else contentBlock">
+            <div class="m-carousel-item-container" (click)="addTravelPosition()">
+              Add new item {{tarvelPosition.name}}
+            </div>
+          </div>
+          <ng-template #contentBlock>
+            <div class="m-carousel-item-container">
+              {{tarvelPosition.name}}
+            </div>
+          </ng-template>
+        </ng-template>
+    </p-carousel>
     </p-accordionTab>
     <p-accordionTab header="Timeline">
         Content 2

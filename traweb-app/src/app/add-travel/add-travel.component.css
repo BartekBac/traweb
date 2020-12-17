@@ -1,0 +1,11 @@
+.m-carousel-item-container {
+  height: 200px;
+  border: 1px solid var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:host ::ng-deep .m-hidden-indicators .p-carousel-indicators {
+  visibility: hidden;
+}
