@@ -8,6 +8,9 @@ import { CardModule } from 'primeng/card';
 import { DropdownModule } from 'primeng/dropdown';
 import { TooltipModule } from 'primeng/tooltip';
 import { ToastModule } from 'primeng/toast';
+import { PanelModule } from 'primeng/panel';
+import { AccordionModule } from 'primeng/accordion';
+import { CarouselModule } from 'primeng/carousel';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -22,6 +25,8 @@ import { TokenInterceptor } from './interceptors/token.interceptor';
 import { BodyInterceptor } from './interceptors/body.interceptor';
 import { HomeComponent } from './home/home.component';
 import { NgSimpleSidebarModule } from 'ng-simple-sidebar';
+import { CurrentUserResolver } from './resolvers/current-user.resolver';
+import { AddTravelComponent } from './add-travel/add-travel.component';
 
 
 @NgModule({
@@ -31,7 +36,8 @@ import { NgSimpleSidebarModule } from 'ng-simple-sidebar';
     RegisterComponent,
     FlagImagePipe,
     InputWithValidatorComponent,
-    HomeComponent
+    HomeComponent,
+    AddTravelComponent
   ],
   imports: [
     BrowserModule,
@@ -45,11 +51,15 @@ import { NgSimpleSidebarModule } from 'ng-simple-sidebar';
     TooltipModule,
     HttpClientModule,
     ToastModule,
-    NgSimpleSidebarModule
+    NgSimpleSidebarModule,
+    PanelModule,
+    AccordionModule,
+    CarouselModule
   ],
   providers: [MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: BodyInterceptor, multi: true }
+    { provide: HTTP_INTERCEPTORS, useClass: BodyInterceptor, multi: true },
+    CurrentUserResolver
   ],
   bootstrap: [AppComponent]
 })

@@ -18,3 +18,11 @@ class UserViewset(viewsets.ModelViewSet):
             self.permission_classes = (IsOwnedUserModel,)
 
         return super(UserViewset, self).get_permissions()
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+
+        if pk == "current":
+            return self.request.user
+
+        return super(UserViewset, self).get_object()
