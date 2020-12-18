@@ -49,6 +49,11 @@ html, body {
 :host ::ng-deep .m-side-bar .dock {
   min-width: 60px;
   height: auto !important;
+  background-color: var(--surface-e) !important;
+}
+
+:host ::ng-deep .m-side-bar * {
+  color: var(--text-color);
 }
 
 :host ::ng-deep .m-side-bar .menu-item {

@@ -1,14 +1,18 @@
 <p-panel>
   <p-header>
-      Travel creator
+    Travel creator
   </p-header>
   <p-accordion>
     <p-accordionTab header="Travel positions">
-      <p-carousel [ngClass]="travelPositionsView.length < 3 ? 'm-hidden-indicators': 'm-indicators'" [value]="travelPositionsView" [numVisible]="3" [numScroll]="2">
+      <p-carousel [ngClass]="travelPositionsView.length <= 3 ? 'm-hidden-indicators': 'm-indicators'"
+        [value]="travelPositionsView" [numVisible]="3" [numScroll]="2">
         <ng-template let-tarvelPosition pTemplate="item">
           <div *ngIf="tarvelPosition.name === 'add-new'; else contentBlock">
-            <div class="m-carousel-item-container" (click)="addTravelPosition()">
-              Add new item {{tarvelPosition.name}}
+            <div class="m-carousel-item-container m-add-item-container" (click)="addTravelPosition()">
+              <div class="m-inside-container">
+                <div><i class="pi pi-plus-circle m-icon-big"></i></div>
+                <div><label>Add new travel position</label></div>
+              </div>
             </div>
           </div>
           <ng-template #contentBlock>
@@ -17,13 +21,13 @@
             </div>
           </ng-template>
         </ng-template>
-    </p-carousel>
+      </p-carousel>
     </p-accordionTab>
     <p-accordionTab header="Timeline">
-        Content 2
+      Content 2
     </p-accordionTab>
     <p-accordionTab header="Map">
-        Content 3
+      Content 3
     </p-accordionTab>
-</p-accordion>
+  </p-accordion>
 </p-panel>

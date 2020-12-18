@@ -6,6 +6,21 @@
   align-items: center;
 }
 
+.m-add-item-container:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  border-width: 2px;
+  cursor: pointer;
+}
+
+.m-icon-big {
+  font-size: x-large;
+}
+
+.m-inside-container {
+  text-align: center;
+}
+
 :host ::ng-deep .m-hidden-indicators .p-carousel-indicators {
   visibility: hidden;
 }
