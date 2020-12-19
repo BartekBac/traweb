@@ -5,10 +5,8 @@ export class TravelPosition {
   lng: number;
   name: string;
   type: TravelPositionType;
+  rating: number;
   description?: string;
-  overallRating?: number;
   mainImage?: string;
-  isFree?: boolean;
-  expensivityRating?: string;
-  petFriendly?: boolean;
+  pictures?: string[];
 }

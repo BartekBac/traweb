@@ -27,6 +27,7 @@ import { HomeComponent } from './home/home.component';
 import { NgSimpleSidebarModule } from 'ng-simple-sidebar';
 import { CurrentUserResolver } from './resolvers/current-user.resolver';
 import { AddTravelComponent } from './add-travel/add-travel.component';
+import { TravelPositionTypePipe } from './pipes/travel-position-type.pipe';
 
 
 @NgModule({
@@ -37,7 +38,8 @@ import { AddTravelComponent } from './add-travel/add-travel.component';
     FlagImagePipe,
     InputWithValidatorComponent,
     HomeComponent,
-    AddTravelComponent
+    AddTravelComponent,
+    TravelPositionTypePipe
   ],
   imports: [
     BrowserModule,

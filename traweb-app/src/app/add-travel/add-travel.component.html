@@ -4,12 +4,12 @@
   </p-header>
   <p-accordion>
     <p-accordionTab header="Travel positions">
-      <p-carousel [ngClass]="travelPositionsView.length <= 3 ? 'm-hidden-indicators': 'm-indicators'"
-        [value]="travelPositionsView" [numVisible]="3" [numScroll]="2">
+      <p-carousel [ngClass]="travelPositions.length <= 3 ? 'm-hidden-indicators': 'm-indicators'"
+        [value]="travelPositions" [numVisible]="3" [numScroll]="2">
         <ng-template let-tarvelPosition pTemplate="item">
           <div *ngIf="tarvelPosition.name === 'add-new'; else contentBlock">
             <div class="m-carousel-item-container m-add-item-container" (click)="addTravelPosition()">
-              <div class="m-inside-container">
+              <div class="m-add-inside-container">
                 <div><i class="pi pi-plus-circle m-icon-big"></i></div>
                 <div><label>Add new travel position</label></div>
               </div>
@@ -17,7 +17,29 @@
           </div>
           <ng-template #contentBlock>
             <div class="m-carousel-item-container">
-              {{tarvelPosition.name}}
+              <div class="m-inside-carousel">
+                <div class="p-fluid">
+                  <div class="p-field p-grid">
+                    <div class="p-col-10">
+                      <p-dropdown [options]="travelPositionValues" [(ngModel)]="tarvelPosition.type">
+                        <ng-template let-travelPositionType pTemplate="item">
+                          <div>
+                            <div>{{travelPositionType | travelPositionType}}</div>
+                          </div>
+                        </ng-template>
+                        <ng-template let-travelPositionType pTemplate="selectedItem">
+                          <div>
+                            <div>{{tarvelPosition.type | travelPositionType}}</div>
+                          </div>
+                        </ng-template>
+                      </p-dropdown>
+                    </div>
+                    <div class="p-col-2">
+                      <i class="m-type-icon material-icons">{{tarvelPosition.type | travelPositionType: 'icon'}}</i>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </ng-template>
         </ng-template>

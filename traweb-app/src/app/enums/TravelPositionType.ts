@@ -1,5 +1,5 @@
 export enum TravelPositionType {
-  TouristAttraction,
-  AccommodationPlace,
-  DiningPlace
+  AccommodationPlace = 0,
+  DiningPlace = 1,
+  TouristAttraction = 2
 }

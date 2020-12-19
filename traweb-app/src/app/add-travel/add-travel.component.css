@@ -17,8 +17,12 @@
   font-size: x-large;
 }
 
-.m-inside-container {
+.m-add-inside-container {
   text-align: center;
+}
+
+.m-type-icon {
+  font-size: 36px;
 }
 
 :host ::ng-deep .m-hidden-indicators .p-carousel-indicators {
