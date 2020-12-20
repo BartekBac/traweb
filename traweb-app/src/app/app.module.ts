@@ -11,6 +11,9 @@ import { ToastModule } from 'primeng/toast';
 import { PanelModule } from 'primeng/panel';
 import { AccordionModule } from 'primeng/accordion';
 import { CarouselModule } from 'primeng/carousel';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { RatingModule } from 'primeng/rating';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -56,7 +59,10 @@ import { TravelPositionTypePipe } from './pipes/travel-position-type.pipe';
     NgSimpleSidebarModule,
     PanelModule,
     AccordionModule,
-    CarouselModule
+    CarouselModule,
+    OverlayPanelModule,
+    RatingModule,
+    InputTextareaModule
   ],
   providers: [MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

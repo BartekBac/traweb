@@ -1,5 +1,5 @@
 .m-carousel-item-container {
-  height: 200px;
+  height: 450px;
   border: 1px solid var(--text-color);
   display: flex;
   justify-content: center;
@@ -11,6 +11,10 @@
   border-color: var(--primary-color);
   border-width: 2px;
   cursor: pointer;
+}
+
+.m-inside-carousel {
+  width: 100%;
 }
 
 .m-icon-big {
@@ -27,4 +31,8 @@
 
 :host ::ng-deep .m-hidden-indicators .p-carousel-indicators {
   visibility: hidden;
+}
+
+.m-textarea {
+  resize: none;
 }

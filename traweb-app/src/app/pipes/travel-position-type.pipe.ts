@@ -13,14 +13,6 @@ export class TravelPositionTypePipe implements PipeTransform {
    */
   transform(value: number, mode?: string): string {
     const selectedMode = mode ?? 'name';
-    if (value === 0) {
-      console.log('value === 0');
-    }
-    switch(value) {
-      case 0: console.log('switch 0'); break;
-      default: console.log('switch default');
-    }
-
     if (selectedMode === 'name') {
       switch (value) {
         case TravelPositionType.AccommodationPlace:

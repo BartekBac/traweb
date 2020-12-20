@@ -6,8 +6,8 @@
     <p-accordionTab header="Travel positions">
       <p-carousel [ngClass]="travelPositions.length <= 3 ? 'm-hidden-indicators': 'm-indicators'"
         [value]="travelPositions" [numVisible]="3" [numScroll]="2">
-        <ng-template let-tarvelPosition pTemplate="item">
-          <div *ngIf="tarvelPosition.name === 'add-new'; else contentBlock">
+        <ng-template let-travelPosition pTemplate="item">
+          <div *ngIf="travelPosition.name === 'add-new'; else contentBlock">
             <div class="m-carousel-item-container m-add-item-container" (click)="addTravelPosition()">
               <div class="m-add-inside-container">
                 <div><i class="pi pi-plus-circle m-icon-big"></i></div>
@@ -19,25 +19,36 @@
             <div class="m-carousel-item-container">
               <div class="m-inside-carousel">
                 <div class="p-fluid">
-                  <div class="p-field p-grid">
+                  <div class="p-field p-col-12 p-grid">
                     <div class="p-col-10">
-                      <p-dropdown [options]="travelPositionValues" [(ngModel)]="tarvelPosition.type">
-                        <ng-template let-travelPositionType pTemplate="item">
-                          <div>
-                            <div>{{travelPositionType | travelPositionType}}</div>
-                          </div>
-                        </ng-template>
-                        <ng-template let-travelPositionType pTemplate="selectedItem">
-                          <div>
-                            <div>{{tarvelPosition.type | travelPositionType}}</div>
-                          </div>
-                        </ng-template>
-                      </p-dropdown>
+                      <p-dropdown [options]="travelPositionValues" [(ngModel)]="travelPosition.type"
+                        optionLabel="label" optionValue="value"></p-dropdown>
                     </div>
                     <div class="p-col-2">
-                      <i class="m-type-icon material-icons">{{tarvelPosition.type | travelPositionType: 'icon'}}</i>
+                      <i class="m-type-icon material-icons-round">
+                        {{travelPosition.type | travelPositionType:'icon'}}
+                      </i>
                     </div>
                   </div>
+                  <div class="p-field p-col-12">
+                    <span class="p-float-label">
+                      <input type="text" [id]="getUniqueNameInputId(travelPosition)" pInputText
+                        [(ngModel)]="travelPosition.name">
+                      <label [for]="getUniqueNameInputId(travelPosition)">Name</label>
+                    </span>
+                  </div>
+                  <div class="p-field p-col-12">
+                    <p-button [label]="'Location: [lat:'+travelPosition.lat+' lng:'+travelPosition.lng+']'" icon="pi pi-map-marker" (click)="op.toggle($event)"></p-button>
+                  </div>
+                  <div class="p-field p-col-12">
+                    <p-rating [(ngModel)]="travelPosition.rating" [cancel]="false" [stars]="7"></p-rating>
+                  </div>
+                  <div class="p-field p-col-12">
+                    <span class="p-float-label">
+                        <textarea [id]="getUniqueDescriptionInputId(travelPosition)" class="m-textarea" rows="3" cols="30" [(ngModel)]="travelPosition.description" pInputTextarea></textarea>
+                        <label [for]="getUniqueDescriptionInputId(travelPosition)">Description</label>
+                    </span>
+                </div>
                 </div>
               </div>
             </div>
@@ -53,3 +64,9 @@
     </p-accordionTab>
   </p-accordion>
 </p-panel>
+
+<p-overlayPanel #op [showCloseIcon]="true">
+  <ng-template pTemplate>
+      Here will be a map component that will allow you to select a location
+  </ng-template>
+</p-overlayPanel>
