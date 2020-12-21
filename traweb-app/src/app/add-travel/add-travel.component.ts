@@ -43,6 +43,10 @@ export class AddTravelComponent implements OnInit {
     return 'id-description-input-' + this.travelPositions.indexOf(travelPosition);
   }
 
+  onImageUpload(imageSource: any, travelPosition: TravelPosition): void {
+    travelPosition.mainImage = imageSource;
+  }
+
   addTravelPosition(): void {
     const newTravelPosition: TravelPosition = {
         lat: 0, lng: 0, name: '', type: TravelPositionType.AccommodationPlace, rating: 4

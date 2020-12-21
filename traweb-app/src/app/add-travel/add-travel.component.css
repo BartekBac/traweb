@@ -1,6 +1,9 @@
 .m-carousel-item-container {
-  height: 450px;
+  height: 320px;
   border: 1px solid var(--text-color);
+}
+
+.m-add-item-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,7 +17,7 @@
 }
 
 .m-inside-carousel {
-  width: 100%;
+  margin: 1em;
 }
 
 .m-icon-big {
