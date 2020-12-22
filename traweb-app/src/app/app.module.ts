@@ -11,6 +11,11 @@ import { ToastModule } from 'primeng/toast';
 import { PanelModule } from 'primeng/panel';
 import { AccordionModule } from 'primeng/accordion';
 import { CarouselModule } from 'primeng/carousel';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { RatingModule } from 'primeng/rating';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { FileUploadModule } from 'primeng/fileupload';
+import { TabViewModule } from 'primeng/tabview';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +32,8 @@ import { HomeComponent } from './home/home.component';
 import { NgSimpleSidebarModule } from 'ng-simple-sidebar';
 import { CurrentUserResolver } from './resolvers/current-user.resolver';
 import { AddTravelComponent } from './add-travel/add-travel.component';
+import { TravelPositionTypePipe } from './pipes/travel-position-type.pipe';
+import { UploadImageComponent } from './shared/components/upload-image/upload-image.component';
 
 
 @NgModule({
@@ -37,7 +44,9 @@ import { AddTravelComponent } from './add-travel/add-travel.component';
     FlagImagePipe,
     InputWithValidatorComponent,
     HomeComponent,
-    AddTravelComponent
+    AddTravelComponent,
+    TravelPositionTypePipe,
+    UploadImageComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +63,12 @@ import { AddTravelComponent } from './add-travel/add-travel.component';
     NgSimpleSidebarModule,
     PanelModule,
     AccordionModule,
-    CarouselModule
+    CarouselModule,
+    OverlayPanelModule,
+    RatingModule,
+    InputTextareaModule,
+    FileUploadModule,
+    TabViewModule
   ],
   providers: [MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },

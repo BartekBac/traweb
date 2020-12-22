@@ -1,16 +1,92 @@
 <p-panel>
   <p-header>
-      Travel creator
+    Travel creator
   </p-header>
   <p-accordion>
     <p-accordionTab header="Travel positions">
-       Content 1
+      <p-carousel [ngClass]="travelPositions.length <= 3 ? 'm-hidden-indicators': 'm-indicators'"
+        [value]="travelPositions" [numVisible]="3" [numScroll]="2">
+        <ng-template let-travelPosition pTemplate="item">
+          <div *ngIf="travelPosition.name === 'add-new'; else contentBlock">
+            <div class="m-carousel-item-container m-add-item-container" (click)="addTravelPosition()">
+              <div class="m-add-inside-container">
+                <div><i class="pi pi-plus-circle m-icon-big"></i></div>
+                <div><label>Add new travel position</label></div>
+              </div>
+            </div>
+          </div>
+          <ng-template #contentBlock>
+            <div class="m-carousel-item-container">
+              <div class="m-inside-carousel">
+                <p-tabView>
+                  <p-tabPanel header="General">
+                    <div class="p-fluid">
+                      <div class="p-field p-col-12 p-grid">
+                        <div class="p-col-10">
+                          <p-dropdown [options]="travelPositionValues" [(ngModel)]="travelPosition.type"
+                            optionLabel="label" optionValue="value"></p-dropdown>
+                        </div>
+                        <div class="p-col-2">
+                          <i class="m-type-icon material-icons-round">
+                            {{travelPosition.type | travelPositionType:'icon'}}
+                          </i>
+                        </div>
+                      </div>
+                      <div class="p-field p-col-12">
+                        <span class="p-float-label">
+                          <input type="text" [id]="getUniqueNameInputId(travelPosition)" pInputText
+                            [(ngModel)]="travelPosition.name">
+                          <label [for]="getUniqueNameInputId(travelPosition)">Name</label>
+                        </span>
+                      </div>
+                      <div class="p-field p-col-12">
+                        <p-button [label]="'Location: [lat:'+travelPosition.lat+' lng:'+travelPosition.lng+']'"
+                          icon="pi pi-map-marker" (click)="op.toggle($event)"></p-button>
+                      </div>
+                    </div>
+                  </p-tabPanel>
+                  <p-tabPanel header="Details">
+                    <div class="p-fluid">
+                      <div class="p-field p-col-12">
+                        <p-rating [(ngModel)]="travelPosition.rating" [cancel]="false" [stars]="7"></p-rating>
+                      </div>
+                      <div class="p-field p-col-12">
+                        <span class="p-float-label">
+                          <textarea [id]="getUniqueDescriptionInputId(travelPosition)" class="m-textarea" rows="3"
+                            cols="30" [(ngModel)]="travelPosition.description" pInputTextarea></textarea>
+                          <label [for]="getUniqueDescriptionInputId(travelPosition)">Description</label>
+                        </span>
+                      </div>
+                    </div>
+                  </p-tabPanel>
+                  <p-tabPanel header="Images">
+                    <div class="p-fluid">
+                      <div class="p-field p-col-12">
+                        <app-upload-image [imageSrc]="travelPosition.mainImage" [showContent]="false"
+                          (imageUploaded)="onImageUpload($event, travelPosition)"></app-upload-image>
+                      </div>
+                    </div>
+                  </p-tabPanel>
+                </p-tabView>
+              </div>
+            </div>
+          </ng-template>
+        </ng-template>
+      </p-carousel>
     </p-accordionTab>
     <p-accordionTab header="Timeline">
-        Content 2
+      Content 2
     </p-accordionTab>
     <p-accordionTab header="Map">
-        Content 3
+      Content 3
     </p-accordionTab>
-</p-accordion>
+  </p-accordion>
 </p-panel>
+
+<p-toast></p-toast>
+
+<p-overlayPanel #op [showCloseIcon]="true">
+  <ng-template pTemplate>
+    Here will be a map component that will allow you to select a location
+  </ng-template>
+</p-overlayPanel>

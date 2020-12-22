@@ -1,0 +1,41 @@
+.m-carousel-item-container {
+  height: 320px;
+  border: 1px solid var(--text-color);
+}
+
+.m-add-item-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.m-add-item-container:hover {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+  border-width: 2px;
+  cursor: pointer;
+}
+
+.m-inside-carousel {
+  margin: 1em;
+}
+
+.m-icon-big {
+  font-size: x-large;
+}
+
+.m-add-inside-container {
+  text-align: center;
+}
+
+.m-type-icon {
+  font-size: 36px;
+}
+
+:host ::ng-deep .m-hidden-indicators .p-carousel-indicators {
+  visibility: hidden;
+}
+
+.m-textarea {
+  resize: none;
+}

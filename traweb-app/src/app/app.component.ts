@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { AuthService } from './auth/services/auth.service';
-import { NgSimpleSidebarService, SimpleSidebarPosition, SimpleSidebarItem } from 'ng-simple-sidebar';
+import { NgSimpleSidebarService, SimpleSidebarPosition, SimpleSidebarItem, SimpleSidebarConfiguration } from 'ng-simple-sidebar';
 
 @Component({
   selector: 'app-root',
@@ -47,7 +47,12 @@ export class AppComponent implements OnInit {
 
         position: SimpleSidebarPosition.bottom
     }
-];
+  ];
+
+  sidebarConfiguration: SimpleSidebarConfiguration = {
+    openIcon: 'pi pi-bars',
+    closeIcon: 'pi pi-times',
+  };
 
   constructor(
     private authService: AuthService,
@@ -56,14 +61,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.sidebarService.addItems(this.sidebarItems);
-    this.sidebarService.configure({
-      openIcon: 'pi pi-bars',
-      closeIcon: 'pi pi-times',
-      colors: {
-        background: getComputedStyle(document.documentElement).getPropertyValue('--surface-e'),
-        font: getComputedStyle(document.documentElement).getPropertyValue('--text-color')
-      }
-    });
+    this.sidebarService.configure(this.sidebarConfiguration);
   }
 
   showSidebar(): boolean {
