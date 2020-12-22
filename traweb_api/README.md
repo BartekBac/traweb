@@ -7,8 +7,11 @@ This project was generated with django
 $ git clone https://github.com/BartekBac/traweb.git
 
 $ cd traweb_api
+
 $ pip install djoser
+
 $ pip install djangorestframework
+
 $ pip install django-cors-headers
 
 $ python .\manage.py makemigrations
