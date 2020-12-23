@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { TravelPositionType } from '../enums/TravelPositionType';
+import { Travel } from '../models/Travel';
 import { TravelPosition } from '../models/TravelPosition';
 import { TravelPositionTypePipe } from '../pipes/travel-position-type.pipe';
 
@@ -11,22 +12,32 @@ import { TravelPositionTypePipe } from '../pipes/travel-position-type.pipe';
 })
 export class AddTravelComponent implements OnInit {
 
+  travel: Travel = {
+    name: '',
+    beginDate: undefined,
+    endDate: undefined,
+    travelPositions: [],
+    opinions: [],
+    countries: [],
+    cities: []
+  };
+
   addPosition: TravelPosition = {lat: 0, lng: 0, name: 'add-new', type: 0, rating: 0};
 
   travelPositions: TravelPosition[] = [this.addPosition];
-  travelPositionValues: SelectItem[];
+  travelPositionTypes: SelectItem[];
 
   constructor() {}
 
   ngOnInit(): void {
-    this.travelPositionValues = this.getTravelPosiotionValues();
+    this.travelPositionTypes = this.getTravelPosiotionTypes();
   }
 
   getCarouselPageItemsCount(maxPageItems: number = 3): number {
     return this.travelPositions.length > maxPageItems ? maxPageItems : this.travelPositions.length;
   }
 
-  getTravelPosiotionValues(): SelectItem[] {
+  getTravelPosiotionTypes(): SelectItem[] {
     const travelPositionPipe = new TravelPositionTypePipe();
     return [
       {value: TravelPositionType.AccommodationPlace, label: travelPositionPipe.transform(TravelPositionType.AccommodationPlace, 'name')},

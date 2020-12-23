@@ -16,6 +16,8 @@ import { RatingModule } from 'primeng/rating';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FileUploadModule } from 'primeng/fileupload';
 import { TabViewModule } from 'primeng/tabview';
+import { ChipsModule } from 'primeng/chips';
+import { CalendarModule } from 'primeng/calendar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -68,7 +70,9 @@ import { UploadImageComponent } from './shared/components/upload-image/upload-im
     RatingModule,
     InputTextareaModule,
     FileUploadModule,
-    TabViewModule
+    TabViewModule,
+    ChipsModule,
+    CalendarModule
   ],
   providers: [MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
