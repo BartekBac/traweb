@@ -2,6 +2,42 @@
   <p-header>
     Travel creator
   </p-header>
+  <div class="p-fluid">
+    <div class="p-col-12">
+      <span class="p-float-label">
+        <input type="text" id="travelname" pInputText [(ngModel)]="travel.name">
+        <label for="travelname">Travel name</label>
+      </span>
+    </div>
+    <div class="p-grid p-col-12">
+      <div class="p-col-6">
+        <span class="p-float-label">
+          <p-chips [(ngModel)]="travel.countries" field="name" [disabled]="true"></p-chips>
+          <label for="travelname">Involved countries</label>
+        </span>
+      </div>
+      <div class="p-col-6">
+        <span class="p-float-label">
+          <p-chips [(ngModel)]="travel.cities" field="name" [disabled]="true"></p-chips>
+          <label for="travelname">Involved cities</label>
+        </span>
+      </div>
+    </div>
+    <div class="p-grid p-col-12">
+      <div class="p-col-6">
+        <span class="p-float-label">
+          <p-calendar [(ngModel)]="travel.beginDate" [showIcon]="true" dateFormat="mm-dd-yy" id="travelbegindate"></p-calendar>
+          <label for="travelbegindate">Begin date</label>
+        </span>
+      </div>
+      <div class="p-col-6">
+        <span class="p-float-label">
+          <p-calendar [(ngModel)]="travel.endDate" [showIcon]="true" dateFormat="mm-dd-yy" id="travelenddate"></p-calendar>
+          <label for="travelenddate">End date</label>
+        </span>
+      </div>
+    </div>
+  </div>
   <p-accordion>
     <p-accordionTab header="Travel positions">
       <p-carousel [ngClass]="travelPositions.length <= 3 ? 'm-hidden-indicators': 'm-indicators'"
@@ -23,7 +59,7 @@
                     <div class="p-fluid">
                       <div class="p-field p-col-12 p-grid">
                         <div class="p-col-10">
-                          <p-dropdown [options]="travelPositionValues" [(ngModel)]="travelPosition.type"
+                          <p-dropdown [options]="travelPositionTypes" [(ngModel)]="travelPosition.type"
                             optionLabel="label" optionValue="value"></p-dropdown>
                         </div>
                         <div class="p-col-2">
@@ -40,9 +76,14 @@
                         </span>
                       </div>
                       <div class="p-field p-col-12">
-                        <p-button [label]="'Location: [lat:'+travelPosition.lat+' lng:'+travelPosition.lng+']'"
+                        <p-button class="m-location-button" [label]="getLocationButtonLabel(travelPosition.coordinates)"
                           icon="pi pi-map-marker" (click)="op.toggle($event)"></p-button>
                       </div>
+                      <p-overlayPanel #op [showCloseIcon]="true">
+                        <ng-template pTemplate>
+                          <app-map-select [(location)]="travelPosition.coordinates" [width]="600" [height]="500"></app-map-select>
+                        </ng-template>
+                      </p-overlayPanel>
                     </div>
                   </p-tabPanel>
                   <p-tabPanel header="Details">
@@ -84,9 +125,3 @@
 </p-panel>
 
 <p-toast></p-toast>
-
-<p-overlayPanel #op [showCloseIcon]="true">
-  <ng-template pTemplate>
-    Here will be a map component that will allow you to select a location
-  </ng-template>
-</p-overlayPanel>

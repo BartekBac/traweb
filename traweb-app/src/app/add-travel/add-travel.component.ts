@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { TravelPositionType } from '../enums/TravelPositionType';
+import { Coordinates } from '../models/Coordinates';
+import { Travel } from '../models/Travel';
 import { TravelPosition } from '../models/TravelPosition';
 import { TravelPositionTypePipe } from '../pipes/travel-position-type.pipe';
+import { Functions } from '../shared/constants/Functions';
 
 @Component({
   selector: 'app-add-travel',
@@ -11,22 +14,32 @@ import { TravelPositionTypePipe } from '../pipes/travel-position-type.pipe';
 })
 export class AddTravelComponent implements OnInit {
 
-  addPosition: TravelPosition = {lat: 0, lng: 0, name: 'add-new', type: 0, rating: 0};
+  travel: Travel = {
+    name: '',
+    beginDate: undefined,
+    endDate: undefined,
+    travelPositions: [],
+    opinions: [],
+    countries: [],
+    cities: []
+  };
+
+  addPosition: TravelPosition = {coordinates: {lat: 0, lng: 0}, name: 'add-new', type: 0, rating: 0};
 
   travelPositions: TravelPosition[] = [this.addPosition];
-  travelPositionValues: SelectItem[];
+  travelPositionTypes: SelectItem[];
 
   constructor() {}
 
   ngOnInit(): void {
-    this.travelPositionValues = this.getTravelPosiotionValues();
+    this.travelPositionTypes = this.getTravelPosiotionTypes();
   }
 
   getCarouselPageItemsCount(maxPageItems: number = 3): number {
     return this.travelPositions.length > maxPageItems ? maxPageItems : this.travelPositions.length;
   }
 
-  getTravelPosiotionValues(): SelectItem[] {
+  getTravelPosiotionTypes(): SelectItem[] {
     const travelPositionPipe = new TravelPositionTypePipe();
     return [
       {value: TravelPositionType.AccommodationPlace, label: travelPositionPipe.transform(TravelPositionType.AccommodationPlace, 'name')},
@@ -43,13 +56,22 @@ export class AddTravelComponent implements OnInit {
     return 'id-description-input-' + this.travelPositions.indexOf(travelPosition);
   }
 
+  getLocationButtonLabel(coordinates: Coordinates): string {
+    if (Functions.isLocationSet(coordinates)) {
+      return '[lat:' + coordinates.lat.toPrecision(4) + '... lng:' + coordinates?.lng.toPrecision(4) + '...]';
+    } else {
+      return 'Select location';
+    }
+
+  }
+
   onImageUpload(imageSource: any, travelPosition: TravelPosition): void {
     travelPosition.mainImage = imageSource;
   }
 
   addTravelPosition(): void {
     const newTravelPosition: TravelPosition = {
-        lat: 0, lng: 0, name: '', type: TravelPositionType.AccommodationPlace, rating: 4
+      coordinates: {lat: 0, lng: 0}, name: '', type: TravelPositionType.AccommodationPlace, rating: 4
     };
     this.travelPositions.pop(); // pop addPosition
     this.travelPositions.push(newTravelPosition);

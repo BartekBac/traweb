@@ -1,8 +1,8 @@
 import { TravelPositionType } from "../enums/TravelPositionType";
+import { Coordinates } from "./Coordinates";
 
 export class TravelPosition {
-  lat: number;
-  lng: number;
+  coordinates: Coordinates;
   name: string;
   type: TravelPositionType;
   rating: number;

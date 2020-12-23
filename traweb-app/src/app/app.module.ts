@@ -16,6 +16,8 @@ import { RatingModule } from 'primeng/rating';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FileUploadModule } from 'primeng/fileupload';
 import { TabViewModule } from 'primeng/tabview';
+import { ChipsModule } from 'primeng/chips';
+import { CalendarModule } from 'primeng/calendar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -34,6 +36,8 @@ import { CurrentUserResolver } from './resolvers/current-user.resolver';
 import { AddTravelComponent } from './add-travel/add-travel.component';
 import { TravelPositionTypePipe } from './pipes/travel-position-type.pipe';
 import { UploadImageComponent } from './shared/components/upload-image/upload-image.component';
+import { MapSelectComponent } from './shared/components/map-select/map-select.component';
+import { MapViewComponent } from './shared/components/map-view/map-view.component';
 
 
 @NgModule({
@@ -46,7 +50,9 @@ import { UploadImageComponent } from './shared/components/upload-image/upload-im
     HomeComponent,
     AddTravelComponent,
     TravelPositionTypePipe,
-    UploadImageComponent
+    UploadImageComponent,
+    MapSelectComponent,
+    MapViewComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +74,9 @@ import { UploadImageComponent } from './shared/components/upload-image/upload-im
     RatingModule,
     InputTextareaModule,
     FileUploadModule,
-    TabViewModule
+    TabViewModule,
+    ChipsModule,
+    CalendarModule
   ],
   providers: [MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
