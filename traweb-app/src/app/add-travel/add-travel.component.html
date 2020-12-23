@@ -76,9 +76,14 @@
                         </span>
                       </div>
                       <div class="p-field p-col-12">
-                        <p-button [label]="'Location: [lat:'+travelPosition.lat+' lng:'+travelPosition.lng+']'"
+                        <p-button class="m-location-button" [label]="getLocationButtonLabel(travelPosition.coordinates)"
                           icon="pi pi-map-marker" (click)="op.toggle($event)"></p-button>
                       </div>
+                      <p-overlayPanel #op [showCloseIcon]="true">
+                        <ng-template pTemplate>
+                          <app-map-select [(location)]="travelPosition.coordinates" [width]="600" [height]="500"></app-map-select>
+                        </ng-template>
+                      </p-overlayPanel>
                     </div>
                   </p-tabPanel>
                   <p-tabPanel header="Details">
@@ -120,9 +125,3 @@
 </p-panel>
 
 <p-toast></p-toast>
-
-<p-overlayPanel #op [showCloseIcon]="true">
-  <ng-template pTemplate>
-    Here will be a map component that will allow you to select a location
-  </ng-template>
-</p-overlayPanel>

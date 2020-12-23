@@ -36,6 +36,8 @@ import { CurrentUserResolver } from './resolvers/current-user.resolver';
 import { AddTravelComponent } from './add-travel/add-travel.component';
 import { TravelPositionTypePipe } from './pipes/travel-position-type.pipe';
 import { UploadImageComponent } from './shared/components/upload-image/upload-image.component';
+import { MapSelectComponent } from './shared/components/map-select/map-select.component';
+import { MapViewComponent } from './shared/components/map-view/map-view.component';
 
 
 @NgModule({
@@ -48,7 +50,9 @@ import { UploadImageComponent } from './shared/components/upload-image/upload-im
     HomeComponent,
     AddTravelComponent,
     TravelPositionTypePipe,
-    UploadImageComponent
+    UploadImageComponent,
+    MapSelectComponent,
+    MapViewComponent
   ],
   imports: [
     BrowserModule,

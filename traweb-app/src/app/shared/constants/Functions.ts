@@ -1,3 +1,5 @@
+import { Coordinates } from "src/app/models/Coordinates";
+
 export class Functions {
 
   public static toCamelCase(str: string): string {
@@ -36,4 +38,7 @@ export class Functions {
     return Object.values(error.error).toString();
   }
 
+  public static isLocationSet(location: Coordinates): boolean {
+    return location.lat !== 0 || location.lng !== 0;
+  }
 }
