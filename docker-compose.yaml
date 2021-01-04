@@ -1,0 +1,16 @@
+version: "3"
+
+services:     
+  traweb-api:
+    container_name: traweb-api
+    build: traweb_api
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./traweb_api:/code
+    ports:
+      - "8000:8000"
+  traweb-front:
+    container_name: traweb-front
+    build: traweb-app
+    ports:
+      - "8080:80"
