@@ -3,6 +3,7 @@ import { Coordinates } from 'src/app/models/Coordinates';
 import { Constants } from '../../constants/Constants';
 import * as L from 'leaflet';
 import { Functions } from '../../constants/Functions';
+import { MapMarker } from 'src/app/models/MapMarker';
 
 @Component({
   selector: 'app-map-select',
@@ -13,6 +14,8 @@ export class MapSelectComponent implements AfterViewInit {
 
   @Input() width = 800;
   @Input() height = 600;
+  @Input() startLocation: Coordinates = {lat: Constants.LMAP_DEFAULT_COORD.lat, lng: Constants.LMAP_DEFAULT_COORD.lng};
+  @Input() fixedMarkers: MapMarker[] = [];
   @Input() location: Coordinates;
   @Output() locationChange = new EventEmitter<Coordinates>();
 
@@ -27,18 +30,22 @@ export class MapSelectComponent implements AfterViewInit {
 
   initMap(): void {
     if (this.map == null) {
+      // init map object
       this.map = L.map('map', {
-        center: [Constants.LMAP_DEFAULT_COORD.lat, Constants.LMAP_DEFAULT_COORD.lng],
+        center: [this.startLocation.lat, this.startLocation.lng],
         zoom: 6
       });
-      this.addMarker(Constants.LMAP_DEFAULT_COORD.lat, Constants.LMAP_DEFAULT_COORD.lng);
+      // add fixed markers
+      this.fixedMarkers.forEach(fm => this.addMarker(fm.lat, fm.lng, fm.title, false));
+      // add current draggable marker
+      this.addMainMarker(this.startLocation.lat, this.startLocation.lng);
+      // init map tiles
       const tiles = L.tileLayer(Constants.LMAP_TITLE_LAYER_URL_TEMPLATE, {
         maxZoom: Constants.LMAP_MAX_ZOOM,
         attribution: Constants.LMAP_TITLE_LAYER_OPTIONS_ATTRIBUTION
       });
       tiles.addTo(this.map);
     }
-    console.log('from init');
     this.setCurrentPosition();
   }
 
@@ -53,32 +60,49 @@ export class MapSelectComponent implements AfterViewInit {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           this.map.flyTo([position.coords.latitude, position.coords.longitude], 12);
-          this.moveMarker(position.coords.latitude, position.coords.longitude);
+          this.moveMainMarker(position.coords.latitude, position.coords.longitude);
           this.locationChange.emit(this.getMarkerCoordinates());
         },
         (error) => {
-          this.map.flyTo([Constants.LMAP_DEFAULT_COORD.lat, Constants.LMAP_DEFAULT_COORD.lng], 6);
-          this.moveMarker(Constants.LMAP_DEFAULT_COORD.lat, Constants.LMAP_DEFAULT_COORD.lng);
+          this.map.flyTo([this.startLocation.lat, this.startLocation.lng], 6);
+          this.moveMainMarker(this.startLocation.lat, this.startLocation.lng);
           this.locationChange.emit(this.getMarkerCoordinates());
         },
         {timeout: 1000});
     } else {
       this.map.flyTo([this.location.lat, this.location.lng], 12);
-      this.moveMarker(this.location.lat, this.location.lng);
+      this.moveMainMarker(this.location.lat, this.location.lng);
       this.locationChange.emit(this.getMarkerCoordinates());
     }
   }
 
-  addMarker(latitude: number, longitude: number): void {
-    this.marker = L.marker([latitude, longitude],
-      {title: 'Drag marker to select location', draggable: true})
-      .addTo(this.map)
+  private addMarker(latitude: number, longitude: number, title: string, isDraggable = true, markerIcon?: any): any {
+    const customIcon = markerIcon ?? L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+    });
+    return L.marker([latitude, longitude],
+      {title, draggable: isDraggable, icon: customIcon})
+      .addTo(this.map);
+  }
+
+  addMainMarker(latitude: number, longitude: number): void {
+    const redIcon = L.icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+    });
+
+    this.marker = this.addMarker(latitude, longitude, 'Drag marker to select location', true, redIcon)
       .on('dragend', () => {
         this.locationChange.emit(this.getMarkerCoordinates());
       });
   }
 
-  moveMarker(latitude: number, longitude: number): void {
+  moveMainMarker(latitude: number, longitude: number): void {
     this.marker.setLatLng([latitude, longitude]);
   }
 }
