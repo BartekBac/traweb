@@ -14,6 +14,7 @@ export class MapSelectComponent implements AfterViewInit {
 
   @Input() width = 800;
   @Input() height = 600;
+  @Input() markerTitle = '';
   @Input() startLocation: Coordinates = {lat: Constants.LMAP_DEFAULT_COORD.lat, lng: Constants.LMAP_DEFAULT_COORD.lng};
   @Input() fixedMarkers: MapMarker[] = [];
   @Input() location: Coordinates;
@@ -76,15 +77,17 @@ export class MapSelectComponent implements AfterViewInit {
     }
   }
 
-  private addMarker(latitude: number, longitude: number, title: string, isDraggable = true, markerIcon?: any): any {
+  private addMarker(latitude: number, longitude: number, title: string, isDraggable = true, markerIcon?: any, zIndexOffset?: number): any {
     const customIcon = markerIcon ?? L.icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-blue.png',
       iconSize: [25, 41],
       iconAnchor: [12, 41],
       popupAnchor: [1, -34],
     });
+
+    const zIndex = zIndexOffset ?? 1;
     return L.marker([latitude, longitude],
-      {title, draggable: isDraggable, icon: customIcon})
+      {title, draggable: isDraggable, icon: customIcon, zIndexOffset: zIndex})
       .addTo(this.map);
   }
 
@@ -96,7 +99,9 @@ export class MapSelectComponent implements AfterViewInit {
       popupAnchor: [1, -34],
     });
 
-    this.marker = this.addMarker(latitude, longitude, 'Drag marker to select location', true, redIcon)
+    const markerTitle = (this.markerTitle.length > 0 ? this.markerTitle + ' - ' : '') + 'Drag marker to select location';
+
+    this.marker = this.addMarker(latitude, longitude, markerTitle, true, redIcon, 100)
       .on('dragend', () => {
         this.locationChange.emit(this.getMarkerCoordinates());
       });

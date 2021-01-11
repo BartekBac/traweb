@@ -11,16 +11,17 @@
     </div>
     <div class="p-grid p-col-12">
       <div class="p-col-6">
-        <span class="p-float-label">
-          <p-chips [(ngModel)]="travel.countries" field="name" [disabled]="true"></p-chips>
-          <label for="travelname">Involved countries</label>
-        </span>
+        <p-chips [(ngModel)]="travel.countryCodes" [placeholder]="'Involved countries'"
+        [disabled]='true' [allowDuplicate]='false'>
+          <ng-template let-countryCode pTemplate="countryCode">
+            <img [src]="countryCode | flagImage: 'flat':'24'" class="m-img-flag" />
+            <div>{{getCountryName(countryCode)}}</div>
+          </ng-template>
+        </p-chips>
       </div>
       <div class="p-col-6">
-        <span class="p-float-label">
-          <p-chips [(ngModel)]="travel.cities" field="name" [disabled]="true"></p-chips>
-          <label for="travelname">Involved cities</label>
-        </span>
+        <p-chips [(ngModel)]="travel.cities" [placeholder]="'Involved cities'"
+        [disabled]='true' [allowDuplicate]='false'></p-chips>
       </div>
     </div>
     <div class="p-grid p-col-12">
@@ -79,15 +80,8 @@
                       </div>
                       <div class="p-field p-col-12">
                         <p-button [label]="getLocationButtonLabel(travelPosition.coordinates)" icon="pi pi-map-marker"
-                          (click)="op.toggle($event)"></p-button>
+                          (click)="openMap($event, op, travelPosition)"></p-button>
                       </div>
-                      <p-overlayPanel #op [showCloseIcon]="true">
-                        <ng-template pTemplate>
-                          <app-map-select [(location)]="travelPosition.coordinates" [width]="600" [height]="500"
-                           [fixedMarkers]="getTravelPositionsMarkers(travelPosition)">
-                          </app-map-select>
-                        </ng-template>
-                      </p-overlayPanel>
                     </div>
                   </p-tabPanel>
                   <p-tabPanel header="Details">
@@ -129,3 +123,13 @@
 </p-panel>
 
 <p-toast></p-toast>
+
+<p-overlayPanel class="m-map-select" #op (onHide)="updateInvolvedCities()" [showCloseIcon]="true">
+  <ng-template pTemplate>
+    <div>
+      <app-map-select [(location)]="selectedTravelPosition.coordinates" [markerTitle]="selectedTravelPosition.name" [width]="600" [height]="500"
+      [fixedMarkers]="getTravelPositionsMarkers(selectedTravelPosition)">
+     </app-map-select>
+    </div>
+  </ng-template>
+</p-overlayPanel>

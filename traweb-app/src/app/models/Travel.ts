@@ -9,6 +9,6 @@ export class Travel {
   endDate?: Date;
   travelPositions?: TravelPosition[];
   opinions?: Opinion[];
-  countries?: Country[];
-  cities?: City[];
+  countryCodes?: string[];
+  cities?: string[];
 }

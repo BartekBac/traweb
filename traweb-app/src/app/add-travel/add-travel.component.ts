@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
+import { OverlayPanel } from 'primeng/overlaypanel';
 import { TravelPositionType } from '../enums/TravelPositionType';
 import { Coordinates } from '../models/Coordinates';
 import { MapMarker } from '../models/MapMarker';
 import { Travel } from '../models/Travel';
 import { TravelPosition } from '../models/TravelPosition';
 import { TravelPositionTypePipe } from '../pipes/travel-position-type.pipe';
+import { CountriesService } from '../services/countries.service';
+import { GeocodingService } from '../services/geocoding.service';
 import { Constants } from '../shared/constants/Constants';
 import { Functions } from '../shared/constants/Functions';
 
@@ -22,16 +25,20 @@ export class AddTravelComponent implements OnInit {
     endDate: undefined,
     travelPositions: [],
     opinions: [],
-    countries: [],
+    countryCodes: [],
     cities: []
   };
 
   addPosition: TravelPosition = {coordinates: {lat: 0, lng: 0}, name: 'add-new', type: 0, rating: 0};
 
   travelPositions: TravelPosition[] = [this.addPosition];
+  selectedTravelPosition: TravelPosition;
   travelPositionTypes: SelectItem[];
 
-  constructor() {}
+  constructor(
+    private geocodingService: GeocodingService,
+    private countriesService: CountriesService
+  ) {}
 
   ngOnInit(): void {
     this.travelPositionTypes = this.getTravelPosiotionTypes();
@@ -106,6 +113,47 @@ export class AddTravelComponent implements OnInit {
       };
       return marker;
     });
+  }
+
+  openMap(event: any, op: OverlayPanel, tp: TravelPosition): void {
+    this.selectedTravelPosition = tp;
+    op.toggle(event);
+  }
+
+  private deleteArrayDuplicates(array: any[]): any[] {
+    return array.filter((elem, index, self) => {
+      return index === self.indexOf(elem);
+    })
+  }
+
+  updateInvolvedCities(): void {
+    this.geocodingService.reverse(this.selectedTravelPosition.coordinates.lat, this.selectedTravelPosition.coordinates.lng)
+    .subscribe(
+      res => {
+        this.selectedTravelPosition.city = res.name;
+        this.selectedTravelPosition.countryCode = res.countryCode;
+      },
+      err => {
+        console.error(err);
+      },
+      (/*complete*/) => {
+        this.travel.cities = [];
+        this.travel.countryCodes = [];
+        this.getRealTravelPositions().forEach(
+          tp => {
+            this.travel.cities?.push(tp.city ?? '');
+            this.travel.countryCodes?.push(tp.countryCode ?? '');
+          }
+        );
+
+        this.travel.cities = this.deleteArrayDuplicates(this.travel.cities);
+        this.travel.countryCodes = this.deleteArrayDuplicates(this.travel.countryCodes);
+      }
+    );
+  }
+
+  getCountryName(countryCode: string): string {
+    return this.countriesService.getCountry(countryCode)?.name ?? '';
   }
 
   onImageUpload(imageSource: any, travelPosition: TravelPosition): void {

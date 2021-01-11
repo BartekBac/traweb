@@ -9,4 +9,6 @@ export class TravelPosition {
   description?: string;
   mainImage?: string;
   pictures?: string[];
+  city?: string;
+  countryCode?: string;
 }
