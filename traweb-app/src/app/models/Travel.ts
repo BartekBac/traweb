@@ -5,9 +5,9 @@ import { TravelPosition } from "./TravelPosition";
 
 export class Travel {
   name: string;
-  beginDate?: Date;
-  endDate?: Date;
-  travelPositions?: TravelPosition[];
+  beginDate?: string;
+  endDate?: string;
+  positions?: TravelPosition[] | string;
   opinions?: Opinion[];
   countryCodes?: string[];
   cities?: string[];

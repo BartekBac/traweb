@@ -1,5 +1,6 @@
+import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { SelectItem } from 'primeng/api';
+import { MessageService, SelectItem } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { TravelPositionType } from '../enums/TravelPositionType';
 import { Coordinates } from '../models/Coordinates';
@@ -9,6 +10,7 @@ import { TravelPosition } from '../models/TravelPosition';
 import { TravelPositionTypePipe } from '../pipes/travel-position-type.pipe';
 import { CountriesService } from '../services/countries.service';
 import { GeocodingService } from '../services/geocoding.service';
+import { TravelService } from '../services/travel.service';
 import { Constants } from '../shared/constants/Constants';
 import { Functions } from '../shared/constants/Functions';
 
@@ -23,7 +25,7 @@ export class AddTravelComponent implements OnInit {
     name: '',
     beginDate: undefined,
     endDate: undefined,
-    travelPositions: [],
+    positions: [],
     opinions: [],
     countryCodes: [],
     cities: []
@@ -37,7 +39,10 @@ export class AddTravelComponent implements OnInit {
 
   constructor(
     private geocodingService: GeocodingService,
-    private countriesService: CountriesService
+    private countriesService: CountriesService,
+    private travelService: TravelService,
+    private toastService: MessageService,
+    private datepipe: DatePipe
   ) {}
 
   ngOnInit(): void {
@@ -170,6 +175,16 @@ export class AddTravelComponent implements OnInit {
     this.travelPositions.pop(); // pop addPosition
     this.travelPositions.push(newTravelPosition);
     this.travelPositions.push(this.addPosition);
+  }
+
+  onSubmit(): void {
+    this.travel.positions = JSON.stringify(this.getRealTravelPositions());
+    this.travel.beginDate = this.datepipe.transform(this.travel.beginDate, 'YYYY-MM-dd') ?? undefined;
+    this.travel.endDate = this.datepipe.transform(this.travel.endDate, 'YYYY-MM-dd') ?? undefined;
+    this.travelService.addTravel(this.travel).subscribe(
+      res => this.toastService.add({severity: 'success', summary: 'Travel save succeeded'}),
+      err => this.toastService.add({severity: 'error', summary: 'Travel save failed', detail: err, life: 10000})
+    );
   }
 
 }

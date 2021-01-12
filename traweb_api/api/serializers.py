@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User
+from .models import User, Travel, Coordinates, TravelPosition
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -25,3 +25,21 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+class CoordinatesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Coordinates
+        fields = ('lat', 'lng')
+
+class TravelPositionSerializer(serializers.ModelSerializer):
+    coordinates = CoordinatesSerializer()
+    class Meta:
+        model = TravelPosition
+        fields = ('id', 'name', 'coordinates', 'type', 'rating',
+         'description', 'main_image', 'pictures', 'country_code', 'city')
+
+class TravelSerializer(serializers.ModelSerializer):
+    positions = TravelPositionSerializer(many=True)
+    class Meta:
+        model = Travel
+        fields = ('id', 'name', 'begin_date', 'end_date', 'country_codes', 'cities', 'positions')
