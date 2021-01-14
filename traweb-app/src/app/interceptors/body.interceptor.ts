@@ -18,7 +18,6 @@ export class BodyInterceptor implements HttpInterceptor {
         if (request.body !== null) {
           request = request.clone({body: Functions.getSnakeCaseJSON(request.body)});
         }
-        console.log(request.body);
         return next.handle(request);
   }
 }

@@ -4,6 +4,8 @@ import { MessageService, SelectItem } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { TravelPositionType } from '../enums/TravelPositionType';
 import { Coordinates } from '../models/Coordinates';
+import { TravelDto } from '../models/dtos/TravelDto';
+import { TravelPositionDto } from '../models/dtos/TravelPositionDto';
 import { MapMarker } from '../models/MapMarker';
 import { Travel } from '../models/Travel';
 import { TravelPosition } from '../models/TravelPosition';
@@ -11,6 +13,7 @@ import { TravelPositionTypePipe } from '../pipes/travel-position-type.pipe';
 import { CountriesService } from '../services/countries.service';
 import { GeocodingService } from '../services/geocoding.service';
 import { TravelService } from '../services/travel.service';
+import { UserService } from '../services/user.service';
 import { Constants } from '../shared/constants/Constants';
 import { Functions } from '../shared/constants/Functions';
 
@@ -21,20 +24,29 @@ import { Functions } from '../shared/constants/Functions';
 })
 export class AddTravelComponent implements OnInit {
 
-  travel: Travel = {
+  travel: TravelDto = {
+    user: -1,
     name: '',
-    beginDate: undefined,
-    endDate: undefined,
-    positions: [],
-    opinions: [],
+    beginDate: '',
+    endDate: '',
     countryCodes: [],
     cities: []
   };
 
-  addPosition: TravelPosition = {coordinates: {lat: 0, lng: 0}, name: 'add-new', type: 0, rating: 0};
+  addPosition: TravelPositionDto = {
+    coordinates: {lat: 0, lng: 0},
+    name: 'add-new',
+    type: 0,
+    rating: 0,
+    city: '',
+    countryCode: '',
+    description: '',
+    mainImage: '',
+    pictures: []
+  };
 
-  travelPositions: TravelPosition[] = [this.addPosition];
-  selectedTravelPosition: TravelPosition;
+  travelPositions: TravelPositionDto[] = [this.addPosition];
+  selectedTravelPosition: TravelPositionDto;
   travelPositionTypes: SelectItem[];
 
   constructor(
@@ -42,11 +54,15 @@ export class AddTravelComponent implements OnInit {
     private countriesService: CountriesService,
     private travelService: TravelService,
     private toastService: MessageService,
+    private userService: UserService,
     private datepipe: DatePipe
   ) {}
 
   ngOnInit(): void {
     this.travelPositionTypes = this.getTravelPosiotionTypes();
+    this.userService.getCurrentUser().subscribe(
+      res => this.travel.user = res.id
+    );
   }
 
   getCarouselPageItemsCount(maxPageItems: number = 3): number {
@@ -62,11 +78,11 @@ export class AddTravelComponent implements OnInit {
     ];
   }
 
-  getUniqueNameInputId(travelPosition: TravelPosition): string {
+  getUniqueNameInputId(travelPosition: TravelPositionDto): string {
     return 'id-name-input-' + this.travelPositions.indexOf(travelPosition);
   }
 
-  getUniqueDescriptionInputId(travelPosition: TravelPosition): string {
+  getUniqueDescriptionInputId(travelPosition: TravelPositionDto): string {
     return 'id-description-input-' + this.travelPositions.indexOf(travelPosition);
   }
 
@@ -78,7 +94,7 @@ export class AddTravelComponent implements OnInit {
     }
   }
 
-  private getRealTravelPositions(skipPosition?: TravelPosition): TravelPosition[] {
+  private getRealTravelPositions(skipPosition?: TravelPositionDto): TravelPositionDto[] {
     let realTravelPositions = this.travelPositions.filter(tp => tp.name !== this.addPosition.name);
     if (skipPosition) {
       realTravelPositions = realTravelPositions.filter(tp => tp !== skipPosition);
@@ -107,7 +123,7 @@ export class AddTravelComponent implements OnInit {
     return coordinates;
   }
 
-  getTravelPositionsMarkers(currentTravelPosition: TravelPosition): MapMarker[] {
+  getTravelPositionsMarkers(currentTravelPosition: TravelPositionDto): MapMarker[] {
     return this.getRealTravelPositions(currentTravelPosition).map<MapMarker>((tp) => {
       const marker: MapMarker = {
         lat: tp.coordinates.lat,
@@ -120,7 +136,7 @@ export class AddTravelComponent implements OnInit {
     });
   }
 
-  openMap(event: any, op: OverlayPanel, tp: TravelPosition): void {
+  openMap(event: any, op: OverlayPanel, tp: TravelPositionDto): void {
     this.selectedTravelPosition = tp;
     op.toggle(event);
   }
@@ -166,11 +182,16 @@ export class AddTravelComponent implements OnInit {
   }
 
   addTravelPosition(): void {
-    const newTravelPosition: TravelPosition = {
+    const newTravelPosition: TravelPositionDto = {
       coordinates: this.getNewTravelPositionLocation(),
       name: 'Position ' + +this.travelPositions.length,
       type: TravelPositionType.AccommodationPlace,
-      rating: 4
+      rating: 4,
+      city: '',
+      countryCode: '',
+      description: '',
+      mainImage: '',
+      pictures: []
     };
     this.travelPositions.pop(); // pop addPosition
     this.travelPositions.push(newTravelPosition);
@@ -178,12 +199,35 @@ export class AddTravelComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.travel.positions = JSON.stringify(this.getRealTravelPositions());
-    this.travel.beginDate = this.datepipe.transform(this.travel.beginDate, 'YYYY-MM-dd') ?? undefined;
-    this.travel.endDate = this.datepipe.transform(this.travel.endDate, 'YYYY-MM-dd') ?? undefined;
+    const positions = this.getRealTravelPositions();
+    this.travel.beginDate = this.datepipe.transform(this.travel.beginDate, 'YYYY-MM-dd') ?? '';
+    this.travel.endDate = this.datepipe.transform(this.travel.endDate, 'YYYY-MM-dd') ?? '';
     this.travelService.addTravel(this.travel).subscribe(
-      res => this.toastService.add({severity: 'success', summary: 'Travel save succeeded'}),
-      err => this.toastService.add({severity: 'error', summary: 'Travel save failed', detail: err, life: 10000})
+      res => {
+        let addedPositionsIndex = 0;
+        this.toastService.add({
+          severity: 'success',
+          summary: 'Travel save succeeded',
+          sticky: true,
+          closable: true,
+          detail: 'New travel: ' + res.name + ' has been added\n Adding travel positions '
+           + addedPositionsIndex + '/' + positions.length + '...'
+        });
+        // add travel positions
+        positions.forEach(tp => {
+          this.travelService.addTravelPosition(tp, res.id).subscribe(
+            res => addedPositionsIndex++,
+            err => this.toastService.add({
+              severity: 'error',
+              summary: 'Travel position: ' + tp.name + ' save failed',
+              detail: err,
+              life: 15000
+            })
+          );
+        });
+
+      },
+      err => this.toastService.add({severity: 'error', summary: 'Travel save failed', detail: err, life: 20000})
     );
   }
 

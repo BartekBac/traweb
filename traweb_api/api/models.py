@@ -23,8 +23,7 @@ class TravelPosition(models.Model):
     travel = models.ForeignKey(Travel, on_delete=models.CASCADE)
     coordinates = models.OneToOneField(
         Coordinates,
-        on_delete=models.CASCADE,
-        primary_key=True,
+        on_delete=models.CASCADE
     )
     name = models.CharField(max_length=256)
     type = models.SmallIntegerField()

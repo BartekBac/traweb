@@ -1,4 +1,4 @@
-import { Coordinates } from "src/app/models/Coordinates";
+import { Coordinates } from 'src/app/models/Coordinates';
 
 export class Functions {
 
@@ -14,16 +14,41 @@ export class Functions {
     return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
   }
 
-  private static convertJsonKeys(json: any, convert: (str: string) => string): any {
+  private static isJson(item: any): boolean {
+    item = typeof item !== 'string' ? JSON.stringify(item) : item;
+    try {
+      if (!item.includes('{')){
+        return false;
+      } else {
+        item = JSON.parse(item);
+      }
+    } catch (e) {
+        return false;
+    }
+
+    return (typeof item === 'object' && item !== null);
+  }
+
+  private static convertJsonKeys(json: any, convert: (str: string) => string, isNested = false): any {
     let rawJson = '{';
     Object.keys(json).forEach((key) => {
-      rawJson += `"${convert(key)}": "${json[key]}", `;
+      if (this.isJson(json[key])){
+        // nested objects
+        rawJson += `"${convert(key)}": ${this.convertJsonKeys(json[key], convert, true)}, `;
+      } else {
+        // simple property
+        rawJson += `"${convert(key)}": "${json[key]}", `;
+      }
     });
     if (rawJson.length > 1) {
       rawJson = rawJson.slice(0, -2);
     }
     rawJson += '}';
-    return JSON.parse(rawJson);
+    if (isNested) {
+      return rawJson;
+    } else {
+      return JSON.parse(rawJson);
+    }
   }
 
   public static getCamelCaseJSON(json: any): any {
