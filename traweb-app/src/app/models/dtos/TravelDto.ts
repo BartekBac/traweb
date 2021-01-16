@@ -1,3 +1,5 @@
+import { TravelPositionDto } from "./TravelPositionDto";
+
 export interface TravelDto {
   user: number;
   name: string;
@@ -5,4 +7,5 @@ export interface TravelDto {
   endDate: string;
   countryCodes: string[];
   cities: string[];
+  positions: TravelPositionDto[];
 }

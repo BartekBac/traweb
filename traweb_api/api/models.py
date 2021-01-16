@@ -20,7 +20,7 @@ class Coordinates(models.Model):
     lng = models.FloatField()
 
 class TravelPosition(models.Model):
-    travel = models.ForeignKey(Travel, on_delete=models.CASCADE)
+    travel = models.ForeignKey(Travel, related_name='positions', on_delete=models.CASCADE)
     coordinates = models.OneToOneField(
         Coordinates,
         on_delete=models.CASCADE

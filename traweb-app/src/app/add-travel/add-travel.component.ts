@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MessageService, SelectItem } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { TravelPositionType } from '../enums/TravelPositionType';
@@ -9,6 +9,7 @@ import { TravelPositionDto } from '../models/dtos/TravelPositionDto';
 import { MapMarker } from '../models/MapMarker';
 import { Travel } from '../models/Travel';
 import { TravelPosition } from '../models/TravelPosition';
+import { User } from '../models/User';
 import { TravelPositionTypePipe } from '../pipes/travel-position-type.pipe';
 import { CountriesService } from '../services/countries.service';
 import { GeocodingService } from '../services/geocoding.service';
@@ -24,16 +25,22 @@ import { Functions } from '../shared/constants/Functions';
 })
 export class AddTravelComponent implements OnInit {
 
-  travel: TravelDto = {
-    user: -1,
+  @Input() travel: Travel = {
+    id: -1,
+    user: undefined,
     name: '',
-    beginDate: '',
-    endDate: '',
+    beginDate: undefined,
+    endDate: undefined,
     countryCodes: [],
-    cities: []
+    cities: [],
+    positions: [],
+    opinions: []
   };
 
-  addPosition: TravelPositionDto = {
+  @Input() editMode = true;
+
+  addPosition: TravelPosition = {
+    id: -1000,
     coordinates: {lat: 0, lng: 0},
     name: 'add-new',
     type: 0,
@@ -45,8 +52,8 @@ export class AddTravelComponent implements OnInit {
     pictures: []
   };
 
-  travelPositions: TravelPositionDto[] = [this.addPosition];
-  selectedTravelPosition: TravelPositionDto;
+  travelPositions: TravelPosition[] = [];
+  selectedTravelPosition: TravelPosition;
   travelPositionTypes: SelectItem[];
 
   constructor(
@@ -60,9 +67,16 @@ export class AddTravelComponent implements OnInit {
 
   ngOnInit(): void {
     this.travelPositionTypes = this.getTravelPosiotionTypes();
-    this.userService.getCurrentUser().subscribe(
-      res => this.travel.user = res.id
-    );
+    if (this.travel.id === -1) {
+      // adding new travel
+      this.userService.getCurrentUser().subscribe(
+        res => this.travel.user = res.id
+      );
+    }
+
+    if (this.editMode) {
+      this.travelPositions.push(this.addPosition);
+    }
   }
 
   getCarouselPageItemsCount(maxPageItems: number = 3): number {
@@ -78,11 +92,11 @@ export class AddTravelComponent implements OnInit {
     ];
   }
 
-  getUniqueNameInputId(travelPosition: TravelPositionDto): string {
+  getUniqueNameInputId(travelPosition: TravelPosition): string {
     return 'id-name-input-' + this.travelPositions.indexOf(travelPosition);
   }
 
-  getUniqueDescriptionInputId(travelPosition: TravelPositionDto): string {
+  getUniqueDescriptionInputId(travelPosition: TravelPosition): string {
     return 'id-description-input-' + this.travelPositions.indexOf(travelPosition);
   }
 
@@ -94,8 +108,8 @@ export class AddTravelComponent implements OnInit {
     }
   }
 
-  private getRealTravelPositions(skipPosition?: TravelPositionDto): TravelPositionDto[] {
-    let realTravelPositions = this.travelPositions.filter(tp => tp.name !== this.addPosition.name);
+  private getRealTravelPositions(skipPosition?: TravelPosition): TravelPosition[] {
+    let realTravelPositions = this.travelPositions.filter(tp => tp.id !== this.addPosition.id);
     if (skipPosition) {
       realTravelPositions = realTravelPositions.filter(tp => tp !== skipPosition);
     }
@@ -123,7 +137,7 @@ export class AddTravelComponent implements OnInit {
     return coordinates;
   }
 
-  getTravelPositionsMarkers(currentTravelPosition: TravelPositionDto): MapMarker[] {
+  getTravelPositionsMarkers(currentTravelPosition: TravelPosition): MapMarker[] {
     return this.getRealTravelPositions(currentTravelPosition).map<MapMarker>((tp) => {
       const marker: MapMarker = {
         lat: tp.coordinates.lat,
@@ -136,7 +150,7 @@ export class AddTravelComponent implements OnInit {
     });
   }
 
-  openMap(event: any, op: OverlayPanel, tp: TravelPositionDto): void {
+  openMap(event: any, op: OverlayPanel, tp: TravelPosition): void {
     this.selectedTravelPosition = tp;
     op.toggle(event);
   }
@@ -182,7 +196,8 @@ export class AddTravelComponent implements OnInit {
   }
 
   addTravelPosition(): void {
-    const newTravelPosition: TravelPositionDto = {
+    const newTravelPosition: TravelPosition = {
+      id: -1,
       coordinates: this.getNewTravelPositionLocation(),
       name: 'Position ' + +this.travelPositions.length,
       type: TravelPositionType.AccommodationPlace,
@@ -199,36 +214,50 @@ export class AddTravelComponent implements OnInit {
   }
 
   onSubmit(): void {
-    const positions = this.getRealTravelPositions();
-    this.travel.beginDate = this.datepipe.transform(this.travel.beginDate, 'YYYY-MM-dd') ?? '';
-    this.travel.endDate = this.datepipe.transform(this.travel.endDate, 'YYYY-MM-dd') ?? '';
-    this.travelService.addTravel(this.travel).subscribe(
-      res => {
-        let addedPositionsIndex = 0;
-        this.toastService.add({
-          severity: 'success',
-          summary: 'Travel save succeeded',
-          sticky: true,
-          closable: true,
-          detail: 'New travel: ' + res.name + ' has been added\n Adding travel positions '
-           + addedPositionsIndex + '/' + positions.length + '...'
-        });
-        // add travel positions
-        positions.forEach(tp => {
-          this.travelService.addTravelPosition(tp, res.id).subscribe(
-            res => addedPositionsIndex++,
-            err => this.toastService.add({
-              severity: 'error',
-              summary: 'Travel position: ' + tp.name + ' save failed',
-              detail: err,
-              life: 15000
-            })
-          );
-        });
-
-      },
-      err => this.toastService.add({severity: 'error', summary: 'Travel save failed', detail: err, life: 20000})
-    );
+    if (typeof this.travel.user !== 'string') {
+      this.toastService.add({
+        severity: 'warn', summary: 'Cannot save travel', life: 7000, closable: true,
+         detail: 'Problem encountered when trying to fetch a user from the server'});
+    } else {
+      if (this.travel.id === -1) {
+        // add new travel
+        const newTravel: TravelDto = {
+          name: this.travel.name,
+          user: this.travel.user,
+          beginDate: this.datepipe.transform(this.travel.beginDate, 'YYYY-MM-dd') ?? '',
+          endDate: this.datepipe.transform(this.travel.endDate, 'YYYY-MM-dd') ?? '',
+          cities: this.travel.cities ?? [],
+          countryCodes: this.travel.countryCodes ?? [],
+          positions: this.getRealTravelPositions().map<TravelPositionDto>(tp => {
+            const position: TravelPositionDto = {
+              name: tp.name,
+              coordinates: tp.coordinates,
+              type: tp.type,
+              rating: tp.rating,
+              description: tp.description ?? '',
+              mainImage: tp.mainImage ?? '',
+              pictures: tp.pictures ?? [],
+              city: tp.city ?? '',
+              countryCode: tp.countryCode ?? ''
+            };
+            return position;
+          })
+        };
+        this.travelService.addTravel(newTravel).subscribe(
+          res => {
+            this.toastService.add({severity: 'success', summary: 'Travel save succeeded', life: 2000, detail: res.name});
+            this.travel = res;
+          },
+          err => this.toastService.add({severity: 'error', summary: 'Travel save failed', detail: err, life: 20000, closable: true})
+        );
+      } else {
+        // update existing travel
+        this.travelService.updateTravel(this.travel).subscribe(
+          res => this.toastService.add({severity: 'success', summary: 'Travel update succeeded', life: 2000}),
+          err => this.toastService.add({severity: 'error', summary: 'Travel update failed', detail: err, life: 20000, closable: true})
+        );
+      }
+    }
   }
 
 }

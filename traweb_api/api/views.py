@@ -35,5 +35,3 @@ class TravelViewset(viewsets.ModelViewSet):
 class TravelPositionViewset(viewsets.ModelViewSet):
     queryset = TravelPosition.objects.all()
     serializer_class = TravelPositionSerializer
-
-# TODO: dodać jakieś filtrowanie że z url bierze travel_id i zwraca tylko do te positions

@@ -1,6 +1,6 @@
 from rest_framework import serializers
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 from .models import User, Travel, Coordinates, TravelPosition
-from .util import Url
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -32,29 +32,20 @@ class CoordinatesSerializer(serializers.ModelSerializer):
         model = Coordinates
         fields = ('lat', 'lng')
 
-# TODO: dodać przy travelposition update na podobę create
-
-class TravelPositionSerializer(serializers.ModelSerializer):
+class TravelPositionSerializer(WritableNestedModelSerializer):
     coordinates = CoordinatesSerializer()
     class Meta:
         model = TravelPosition
         fields = ('id', 'name', 'coordinates', 'type', 'rating',
          'description', 'main_image', 'pictures', 'country_code', 'city')
-        read_only_fields = ('id',)
 
-    def create(self, validated_data):
-        travel_id = Url(self.context['request'].path).get_id_of('travels/')
-        travel = Travel.objects.get(pk=travel_id)
-        coordinates_data = validated_data.pop('coordinates')
-        coordinates = Coordinates.objects.create(**coordinates_data)
-        return TravelPosition.objects.create(**validated_data, travel=travel, coordinates=coordinates)
-
-class TravelSerializer(serializers.ModelSerializer):
-    positions = TravelPositionSerializer(many=True, read_only=True)
+class TravelSerializer(WritableNestedModelSerializer):
+    positions = TravelPositionSerializer(many=True)
     class Meta:
         model = Travel
-        fields = ('id', 'user', 'name', 'begin_date', 'end_date', 'country_codes', 'cities', 'positions')
-        read_only_fields = ('id', 'positions',)
+        fields = ('id', 'user', 'name', 'begin_date', 'end_date', 'country_codes', 'cities', 'positions',)
+        read_only_fields = ('id',)
+
     
     def to_representation(self, instance):
         self.fields['user'] =  UserSerializer(read_only=True)

@@ -4,7 +4,7 @@ import { User } from './User';
 
 export class Travel {
   id: number;
-  user: User;
+  user?: User | number;
   name: string;
   beginDate?: Date;
   endDate?: Date;

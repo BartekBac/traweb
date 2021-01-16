@@ -32,12 +32,16 @@ export class Functions {
   private static convertJsonKeys(json: any, convert: (str: string) => string, isNested = false): any {
     let rawJson = '{';
     Object.keys(json).forEach((key) => {
+      if (!Array.isArray(json)) {
+        // if array ommit indexes
+        rawJson += `"${convert(key)}": `;
+      }
       if (this.isJson(json[key])){
         // nested objects
-        rawJson += `"${convert(key)}": ${this.convertJsonKeys(json[key], convert, true)}, `;
+        rawJson += `${this.convertJsonKeys(json[key], convert, true)}, `;
       } else {
         // simple property
-        rawJson += `"${convert(key)}": "${json[key]}", `;
+        rawJson += `"${json[key]}", `;
       }
     });
     if (rawJson.length > 1) {
@@ -45,6 +49,10 @@ export class Functions {
     }
     rawJson += '}';
     if (isNested) {
+      if (Array.isArray(json)) {
+        rawJson = rawJson.replace(/{/, '[');
+        rawJson = rawJson.replace(/}$/, ']');
+      }
       return rawJson;
     } else {
       return JSON.parse(rawJson);
