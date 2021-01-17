@@ -27,14 +27,14 @@
     <div class="p-grid p-col-12">
       <div class="p-col-6">
         <span class="p-float-label">
-          <p-calendar [(ngModel)]="travel.beginDate" [showIcon]="true" dateFormat="dd-mm-yy" id="travelbegindate">
+          <p-calendar [(ngModel)]="travel.beginDate" [showIcon]="true" dateFormat="dd-mm-yy" dateType="string" id="travelbegindate">
           </p-calendar>
           <label for="travelbegindate">Begin date</label>
         </span>
       </div>
       <div class="p-col-6">
         <span class="p-float-label">
-          <p-calendar [(ngModel)]="travel.endDate" [showIcon]="true" dateFormat="dd-mm-yy" id="travelenddate">
+          <p-calendar [(ngModel)]="travel.endDate" [showIcon]="true" dateFormat="dd-mm-yy" dateType="string" id="travelenddate">
           </p-calendar>
           <label for="travelenddate">End date</label>
         </span>

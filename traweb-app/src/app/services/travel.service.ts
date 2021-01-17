@@ -30,7 +30,18 @@ export class TravelService {
   // TODO: przy responsie pobrawić pobieranie string arrayów
 
   updateTravel(travel: Travel): Observable<Travel> {
-    return this.http.put<TravelDto>(this.baseUrl + travel.id, travel)
+    return this.http.put<TravelDto>(this.baseUrl + travel.id + '/', travel)
+    .pipe(
+      map(response => Functions.getCamelCaseJSON(response)),
+      catchError(error => {
+        console.error(error);
+        return throwError(Functions.getErrorMessage(error));
+      })
+    );
+  }
+
+  getTravel(travelId: number): Observable<Travel> {
+    return this.http.get<Travel>(this.baseUrl + travelId + '/')
     .pipe(
       map(response => Functions.getCamelCaseJSON(response)),
       catchError(error => {

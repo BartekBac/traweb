@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MessageService, SelectItem } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
+import { moveMessagePortToContext } from 'worker_threads';
 import { TravelPositionType } from '../enums/TravelPositionType';
 import { Coordinates } from '../models/Coordinates';
 import { TravelDto } from '../models/dtos/TravelDto';
@@ -73,6 +74,14 @@ export class AddTravelComponent implements OnInit {
         res => this.travel.user = res.id
       );
     }
+    /*this.travelService.getTravel(37).subscribe(
+      res => {
+        this.travel = res;
+        this.travelPositions = res.positions ?? [];
+        this.travel.user = (res.user as User).id;
+      },
+      err => console.error(err)
+    );*/
 
     if (this.editMode) {
       this.travelPositions.push(this.addPosition);
@@ -214,12 +223,13 @@ export class AddTravelComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (typeof this.travel.user !== 'string') {
-      this.toastService.add({
-        severity: 'warn', summary: 'Cannot save travel', life: 7000, closable: true,
-         detail: 'Problem encountered when trying to fetch a user from the server'});
-    } else {
-      if (this.travel.id === -1) {
+    if (this.travel.id === -1) {
+      console.log(typeof this.travel.user);
+      if (typeof this.travel.user !== 'number') {
+        this.toastService.add({
+          severity: 'warn', summary: 'Cannot save travel', life: 7000, closable: true,
+           detail: 'Problem encountered when trying to fetch a user from the server'});
+      } else {
         // add new travel
         const newTravel: TravelDto = {
           name: this.travel.name,
@@ -250,13 +260,13 @@ export class AddTravelComponent implements OnInit {
           },
           err => this.toastService.add({severity: 'error', summary: 'Travel save failed', detail: err, life: 20000, closable: true})
         );
-      } else {
-        // update existing travel
-        this.travelService.updateTravel(this.travel).subscribe(
-          res => this.toastService.add({severity: 'success', summary: 'Travel update succeeded', life: 2000}),
-          err => this.toastService.add({severity: 'error', summary: 'Travel update failed', detail: err, life: 20000, closable: true})
-        );
       }
+    } else {
+      // update existing travel
+      this.travelService.updateTravel(this.travel).subscribe(
+        res => this.toastService.add({severity: 'success', summary: 'Travel update succeeded', life: 2000}),
+        err => this.toastService.add({severity: 'error', summary: 'Travel update failed', detail: err, life: 20000, closable: true})
+      );
     }
   }
 
