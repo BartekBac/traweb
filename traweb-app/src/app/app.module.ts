@@ -38,6 +38,7 @@ import { TravelPositionTypePipe } from './pipes/travel-position-type.pipe';
 import { UploadImageComponent } from './shared/components/upload-image/upload-image.component';
 import { MapSelectComponent } from './shared/components/map-select/map-select.component';
 import { MapViewComponent } from './shared/components/map-view/map-view.component';
+import { FriendsComponent } from './friends/friends.component';
 
 
 @NgModule({
@@ -52,7 +53,8 @@ import { MapViewComponent } from './shared/components/map-view/map-view.componen
     TravelPositionTypePipe,
     UploadImageComponent,
     MapSelectComponent,
-    MapViewComponent
+    MapViewComponent,
+    FriendsComponent
   ],
   imports: [
     BrowserModule,
