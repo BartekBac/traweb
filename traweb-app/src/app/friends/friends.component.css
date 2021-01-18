@@ -7,9 +7,35 @@
     grid-column-start: 1;
     grid-column-end: 2;
 
-    border: 5px solid red;
     max-height: 95vh;
-    
+}
+
+.friendTab {
+    border: 1px solid #b5bfcc;
+    min-height: 40px;
+    max-height: 80px;
+}
+
+.friendAvatar{
+    /* max-height: 100%; */
+}
+
+.friendAvatar img {
+    max-width: auto;
+    max-height: 80px;
+}
+
+.image {
+    max-width: auto;
+    max-height: 100%;
+}
+
+/* .friendName{
+    grid-column-start: 2;
+    grid-column-end: 3;
+} */
+
+.friendInfo{
 }
 
 .addFriendsPanel {
