@@ -1,7 +1,7 @@
-import { City } from "./City";
-import { Country } from "./Country";
-import { Opinion } from "./Opinion";
-import { TravelPosition } from "./TravelPosition";
+import { City } from './City';
+import { Country } from './Country';
+import { Opinion } from './Opinion';
+import { TravelPosition } from './TravelPosition';
 
 export class Travel {
   name: string;

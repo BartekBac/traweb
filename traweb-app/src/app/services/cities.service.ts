@@ -70,7 +70,7 @@ export class CitiesService {
           const filteredZipCodes = res.postalCodes
             .filter(pc => pc.placeName === city.name);
           if (filteredZipCodes.length > 0) {
-            return filteredZipCodes.map(pc => pc.postalCode)
+            return filteredZipCodes.map(pc => pc.postalCode);
           } else {
             return res.postalCodes.map(pc => pc.postalCode);
           }

@@ -1,5 +1,5 @@
-import { TravelPositionType } from "../enums/TravelPositionType";
-import { Coordinates } from "./Coordinates";
+import { TravelPositionType } from '../enums/TravelPositionType';
+import { Coordinates } from './Coordinates';
 
 export class TravelPosition {
   coordinates: Coordinates;
