@@ -7,10 +7,15 @@ import { User } from '../models/User';
   styleUrls: ['./friends.component.css']
 })
 export class FriendsComponent implements OnInit {
-  friends: User[];
+  yourFriends: User[];
+  friendsToAdd: User[];
+
+  onAddFriend(event: any): void {
+    console.log("Adding a friend...");
+  }
 
   constructor() { 
-    this.friends = [
+    this.yourFriends = [
       {
         firstName: "Jakub",
         lastName: "Łyko",
@@ -46,14 +51,39 @@ export class FriendsComponent implements OnInit {
         lastLogin: new Date(),
         password: "",
         zipCode: ""
-      },
+      }
+    ];
 
-
-      
-    ]
+    this.friendsToAdd = [
+      {
+        firstName: "Jakub",
+        lastName: "Łyko",
+        city: "Gliwice",
+        country: "Poland",
+        dateJoined: new Date(),
+        email: "",
+        id: 0,
+        lastLogin: new Date(),
+        password: "",
+        zipCode: ""
+      },
+      {
+        firstName: "Jakub",
+        lastName: "Łyko",
+        city: "Gliwice",
+        country: "Poland",
+        dateJoined: new Date(),
+        email: "",
+        id: 0,
+        lastLogin: new Date(),
+        password: "",
+        zipCode: ""
+      }
+    ];
   }
 
   ngOnInit(): void {
   }
+
 
 }

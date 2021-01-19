@@ -4,37 +4,23 @@
            Your friends
         </p-header>
 
-        <div class="friendTab" *ngFor="let friend of friends">
+        <div class="friendTab" *ngFor="let friend of yourFriends">
             <img class="friendAvatar" src="assets/images/user3.png">
-            <!-- <div class="friendAvatar">
-                <img src="assets/images/user3.png">
-            </div> -->
             <div class="friendName">{{ friend.firstName }} {{ friend.lastName }}</div>
             <div class="friendAddress">{{ friend.city }}, {{ friend.country }}</div>
-            <!-- <span>{{ friend.firstName }} {{ friend.lastName }}</span>
-            <span>{{ friend.city }}, {{ friend.country }}</span> -->
-
-            <!-- <i class="pi pi-user" style="font-size: 100%; color:rgb(255, 255, 255)"></i> -->
-
-
-            <!-- <div class="friendInfo">
-                <div class="friendName">
-                    <span>{{ friend.firstName }} {{ friend.lastName }}</span>
-                </div>
-                <div class="friendAddress">
-                    <span>{{ friend.city }}, {{ friend.country }}</span>
-                </div>
-            </div> -->
-        
-            
         </div>
-
-        
     </p-panel>
 
     <p-panel class=addFriendsPanel>
         <p-header>
             Add friends
          </p-header>
+
+         <div class="friendTab" *ngFor="let friend of friendsToAdd">
+            <img class="friendAvatar" src="assets/images/user3.png">
+            <div class="friendName">{{ friend.firstName }} {{ friend.lastName }}</div>
+            <div class="friendAddress">{{ friend.city }}, {{ friend.country }}</div>
+            <button class="addFriendButton" (click)="onAddFriend($event)"><i class="pi pi-plus-circle"></i></button>
+        </div>
     </p-panel>
 </div>
