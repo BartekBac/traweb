@@ -7,36 +7,70 @@
     grid-column-start: 1;
     grid-column-end: 2;
 
+
     max-height: 95vh;
+    overflow: auto;
 }
 
 .friendTab {
     border: 1px solid #b5bfcc;
     min-height: 40px;
     max-height: 80px;
+    height: 80px;
+    display: grid;
+    grid-template-columns: 78px auto auto;
+    grid-template-rows: 1fr 1fr;
+    align-items: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
+
 
 .friendAvatar{
-    /* max-height: 100%; */
-}
-
-.friendAvatar img {
-    max-width: auto;
-    max-height: 80px;
-}
-
-.image {
-    max-width: auto;
     max-height: 100%;
+    max-width: 100%;
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 3;
 }
 
-/* .friendName{
+/* .friendInfo{
+    /* float: right; */
+    /* text-overflow: clip;
     grid-column-start: 2;
     grid-column-end: 3;
-} */
+    grid-row-start: 1;
+    grid-row-end: 3;
+}  */
 
-.friendInfo{
+.friendName{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+
+    margin-left: 5px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 600;
+    font-size: larger;
+    color: rgb(80, 141, 255)
 }
+
+.friendAddress{
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+
+    margin-left: 5px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-weight: 400;
+    font-size: smaller;
+    color: rgb(176, 204, 255)
+}
+
+
 
 .addFriendsPanel {
     grid-column-start: 2;

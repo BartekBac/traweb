@@ -22,7 +22,34 @@ export class FriendsComponent implements OnInit {
         lastLogin: new Date(),
         password: "",
         zipCode: ""
-      }
+      },
+      {
+        firstName: "Jakub",
+        lastName: "Łyko",
+        city: "Gliwice",
+        country: "Poland",
+        dateJoined: new Date(),
+        email: "",
+        id: 0,
+        lastLogin: new Date(),
+        password: "",
+        zipCode: ""
+      },
+      {
+        firstName: "Jakub",
+        lastName: "Łyko",
+        city: "Gliwice",
+        country: "Poland",
+        dateJoined: new Date(),
+        email: "",
+        id: 0,
+        lastLogin: new Date(),
+        password: "",
+        zipCode: ""
+      },
+
+
+      
     ]
   }
 
