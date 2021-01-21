@@ -40,7 +40,7 @@ class TravelPositionSerializer(WritableNestedModelSerializer):
          'description', 'main_image', 'pictures', 'country_code', 'city')
 
 class TravelSerializer(WritableNestedModelSerializer):
-    begin_date = serializers.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601'], )
+    begin_date = serializers.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601']) # to do wywalenia 
     end_date = serializers.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601'])
     positions = TravelPositionSerializer(many=True)
     class Meta:

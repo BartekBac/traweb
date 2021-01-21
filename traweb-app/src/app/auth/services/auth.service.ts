@@ -42,7 +42,6 @@ export class AuthService {
     .pipe(
       map(response => Functions.getCamelCaseJSON(response)),
       tap(response => {
-        console.log(response);
         localStorage.setItem(Constants.LOCAL_STORAGE_AUTH_TOKEN, response.authToken);
         this.router.navigate(['/home']);
       }),

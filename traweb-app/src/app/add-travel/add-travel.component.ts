@@ -2,7 +2,6 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { MessageService, SelectItem } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
-import { moveMessagePortToContext } from 'worker_threads';
 import { TravelPositionType } from '../enums/TravelPositionType';
 import { Coordinates } from '../models/Coordinates';
 import { TravelDto } from '../models/dtos/TravelDto';
@@ -74,11 +73,9 @@ export class AddTravelComponent implements OnInit {
         res => this.travel.user = res.id
       );
     }
-    /*this.travelService.getTravel(37).subscribe(
+    /*this.travelService.getTravel(47).subscribe(
       res => {
-        this.travel = res;
-        this.travelPositions = res.positions ?? [];
-        this.travel.user = (res.user as User).id;
+        this.setPropertiesFromResponse(res);
       },
       err => console.error(err)
     );*/
@@ -86,6 +83,13 @@ export class AddTravelComponent implements OnInit {
     if (this.editMode) {
       this.travelPositions.push(this.addPosition);
     }
+  }
+
+  private setPropertiesFromResponse(travel: Travel): void {
+    this.travel = travel;
+    this.travelPositions = travel.positions ?? [];
+    if (this.editMode) {this.travelPositions.push(this.addPosition); }
+    this.travel.user = (travel.user as User).id;
   }
 
   getCarouselPageItemsCount(maxPageItems: number = 3): number {
@@ -224,7 +228,6 @@ export class AddTravelComponent implements OnInit {
 
   onSubmit(): void {
     if (this.travel.id === -1) {
-      console.log(typeof this.travel.user);
       if (typeof this.travel.user !== 'number') {
         this.toastService.add({
           severity: 'warn', summary: 'Cannot save travel', life: 7000, closable: true,
@@ -234,8 +237,8 @@ export class AddTravelComponent implements OnInit {
         const newTravel: TravelDto = {
           name: this.travel.name,
           user: this.travel.user,
-          beginDate: this.datepipe.transform(this.travel.beginDate, 'YYYY-MM-dd') ?? '',
-          endDate: this.datepipe.transform(this.travel.endDate, 'YYYY-MM-dd') ?? '',
+          beginDate: this.travel.beginDate ?? '',
+          endDate: this.travel.endDate ?? '',
           cities: this.travel.cities ?? [],
           countryCodes: this.travel.countryCodes ?? [],
           positions: this.getRealTravelPositions().map<TravelPositionDto>(tp => {
@@ -256,16 +259,18 @@ export class AddTravelComponent implements OnInit {
         this.travelService.addTravel(newTravel).subscribe(
           res => {
             this.toastService.add({severity: 'success', summary: 'Travel save succeeded', life: 2000, detail: res.name});
-            this.travel = res;
+            this.setPropertiesFromResponse(res);
           },
           err => this.toastService.add({severity: 'error', summary: 'Travel save failed', detail: err, life: 20000, closable: true})
         );
       }
     } else {
       // update existing travel
+      this.travel.positions = this.getRealTravelPositions();
       this.travelService.updateTravel(this.travel).subscribe(
         res => this.toastService.add({severity: 'success', summary: 'Travel update succeeded', life: 2000}),
-        err => this.toastService.add({severity: 'error', summary: 'Travel update failed', detail: err, life: 20000, closable: true})
+        err => this.toastService.add({severity: 'error', summary: 'Travel update failed', detail: err, life: 20000, closable: true}),
+        (/*complete*/) => this.travel.positions?.push(this.addPosition)
       );
     }
   }

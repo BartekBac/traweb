@@ -6,8 +6,8 @@ export class Travel {
   id: number;
   user?: User | number;
   name: string;
-  beginDate?: Date;
-  endDate?: Date;
+  beginDate?: string;
+  endDate?: string;
   positions?: TravelPosition[];
   opinions?: Opinion[];
   countryCodes?: string[];
