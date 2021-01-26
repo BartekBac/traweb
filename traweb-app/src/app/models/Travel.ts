@@ -1,3 +1,5 @@
+import { City } from './City';
+import { Country } from './Country';
 import { Opinion } from './Opinion';
 import { TravelPosition } from './TravelPosition';
 import { User } from './User';
