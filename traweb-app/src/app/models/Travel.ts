@@ -1,14 +1,15 @@
-import { City } from "./City";
-import { Country } from "./Country";
-import { Opinion } from "./Opinion";
-import { TravelPosition } from "./TravelPosition";
+import { Opinion } from './Opinion';
+import { TravelPosition } from './TravelPosition';
+import { User } from './User';
 
 export class Travel {
+  id: number;
+  user?: User | number;
   name: string;
-  beginDate?: Date;
-  endDate?: Date;
-  travelPositions?: TravelPosition[];
+  beginDate?: string;
+  endDate?: string;
+  positions?: TravelPosition[];
   opinions?: Opinion[];
-  countries?: Country[];
-  cities?: City[];
+  countryCodes?: string[];
+  cities?: string[];
 }
