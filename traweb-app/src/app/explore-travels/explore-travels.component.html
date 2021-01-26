@@ -21,7 +21,7 @@
             <div class="p-col-12">
               <p-tabView>
                 <p-tabPanel header="Images">
-                  <p-galleria [(value)]="position.pictures" [containerStyle]="{'max-width': '640px'}" [numVisible]="5"
+                  <p-galleria *ngIf="position.pictures.length > 0" [(value)]="position.pictures" [containerStyle]="{'max-width': '640px'}" [numVisible]="5"
                     [circular]="true" [showItemNavigators]="true" [showThumbnails]="false">
                     <ng-template pTemplate="item" let-item>
                       <img [src]="item" style="width: 100%; display: block;" />
