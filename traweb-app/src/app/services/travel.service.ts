@@ -3,8 +3,9 @@ import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
 import { TravelPositionType } from '../enums/TravelPositionType';
-import { Travel } from '../models/Travel';
 import { TravelPosition } from '../models/TravelPosition';
+import { TravelDto } from '../models/dtos/TravelDto';
+import { Travel } from '../models/Travel';
 import { Constants } from '../shared/constants/Constants';
 import { Functions } from '../shared/constants/Functions';
 
@@ -93,5 +94,39 @@ export class TravelService {
       cities: [],
     });
     return travels;
+  }
+  addTravel(travel: TravelDto): Observable<Travel> {
+    return this.http.post<TravelDto>(this.baseUrl, travel)
+    .pipe(
+      map(response => Functions.getCamelCaseJSON(response)),
+      catchError(error => {
+        console.error(error);
+        return throwError(Functions.getErrorMessage(error));
+      })
+    );
+  }
+
+  // TODO: przy responsie pobrawić pobieranie string arrayów
+
+  updateTravel(travel: Travel): Observable<Travel> {
+    return this.http.put<TravelDto>(this.baseUrl + travel.id + '/', travel)
+    .pipe(
+      map(response => Functions.getCamelCaseJSON(response)),
+      catchError(error => {
+        console.error(error);
+        return throwError(Functions.getErrorMessage(error));
+      })
+    );
+  }
+
+  getTravel(travelId: number): Observable<Travel> {
+    return this.http.get<Travel>(this.baseUrl + travelId + '/')
+    .pipe(
+      map(response => Functions.getCamelCaseJSON(response)),
+      catchError(error => {
+        console.error(error);
+        return throwError(Functions.getErrorMessage(error));
+      })
+    );
   }
 }

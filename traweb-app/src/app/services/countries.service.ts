@@ -42,4 +42,8 @@ export class CountriesService {
     });
   }
 
+  getCountry(countryCode: string): Country | undefined {
+    return this.allCountries.find(c => c.code.toLocaleUpperCase() === countryCode.toLocaleUpperCase());
+  }
+
 }

@@ -40,6 +40,7 @@ import { UploadImageComponent } from './shared/components/upload-image/upload-im
 import { MapSelectComponent } from './shared/components/map-select/map-select.component';
 import { MapViewComponent } from './shared/components/map-view/map-view.component';
 import { ExploreTravelsComponent } from './explore-travels/explore-travels.component';
+import { DatePipe } from '@angular/common';
 
 
 @NgModule({
@@ -85,7 +86,8 @@ import { ExploreTravelsComponent } from './explore-travels/explore-travels.compo
   providers: [MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: BodyInterceptor, multi: true },
-    CurrentUserResolver
+    CurrentUserResolver,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
