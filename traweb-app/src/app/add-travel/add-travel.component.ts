@@ -5,6 +5,7 @@ import { Coordinates } from '../models/Coordinates';
 import { Travel } from '../models/Travel';
 import { TravelPosition } from '../models/TravelPosition';
 import { TravelPositionTypePipe } from '../pipes/travel-position-type.pipe';
+import { BlobStorageService } from '../services/blob-storage.service';
 import { Functions } from '../shared/constants/Functions';
 
 @Component({
@@ -13,6 +14,8 @@ import { Functions } from '../shared/constants/Functions';
   styleUrls: ['./add-travel.component.css']
 })
 export class AddTravelComponent implements OnInit {
+
+  private storageService: BlobStorageService;
 
   travel: Travel = {
     name: '',
@@ -29,7 +32,7 @@ export class AddTravelComponent implements OnInit {
   travelPositions: TravelPosition[] = [this.addPosition];
   travelPositionTypes: SelectItem[];
 
-  constructor() {}
+  constructor(private blobStorageService: BlobStorageService) {}
 
   ngOnInit(): void {
     this.travelPositionTypes = this.getTravelPosiotionTypes();
@@ -65,8 +68,11 @@ export class AddTravelComponent implements OnInit {
 
   }
 
-  onImageUpload(imageSource: any, travelPosition: TravelPosition): void {
-    travelPosition.mainImage = imageSource;
+  onImageUpload(image: File, travelPosition: TravelPosition): void {
+    console.log(image);
+    console.log(travelPosition);
+
+    this.blobStorageService.uploadImage(image)
   }
 
   addTravelPosition(): void {

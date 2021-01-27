@@ -18,7 +18,7 @@ export class UploadImageComponent implements OnInit {
   @Input() imgWidth = 300;
   @Input() showContent = true;
   @Input() imageSrc: any = null;
-  @Output() imageUploaded = new EventEmitter<any>();
+  @Output() imageUploaded = new EventEmitter<File>();
   @ViewChild('uploadControl') uploadControl: FileUpload;
 
   mode = 'advanced';
@@ -36,20 +36,8 @@ export class UploadImageComponent implements OnInit {
   onUpload(event: any): void {
     let file: File;
     file = event.files[0];
-    const reader = new FileReader();
-    reader.readAsDataURL(file);
     const self = this;
-    reader.onload = () => {
-      self.imageSrc = reader.result;
-      self.imageUploaded.emit(reader.result);
-    };
-    this.imageUploaded.emit(this.imageSrc);
-    this.toastService.add({
-      severity: 'info',
-      summary: 'Image Uploaded',
-      detail: 'Name: ' + file.name + '\nSize: ' + file.size / 1000 + ' KB',
-      life: 5000,
-    });
+    this.imageUploaded.emit(file);
     this.uploadControl.clear();
   }
 }

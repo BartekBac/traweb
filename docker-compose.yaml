@@ -9,8 +9,8 @@ services:
       - ./traweb_api:/code
     ports:
       - "8000:8000"
-  traweb-front:
-    container_name: traweb-front
-    build: traweb-app
+  storage:
+    image: "mcr.microsoft.com/azure-storage/azurite"
     ports:
-      - "8080:80"
+      - "10000:10000"
+      - "10001:10001"
