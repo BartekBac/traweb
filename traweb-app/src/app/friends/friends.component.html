@@ -6,7 +6,7 @@
 
         <div class="friendTab" *ngFor="let friend of yourFriends">
             <img class="friendAvatar" src="assets/images/user3.png">
-            <div class="friendName">{{ friend.firstName }} {{ friend.lastName }}</div>
+            <div class="friendName">{{ friend.first_name }} {{ friend.last_name }}</div>
             <div class="friendAddress">{{ friend.city }}, {{ friend.country }}</div>
         </div>
     </p-panel>
@@ -18,9 +18,9 @@
 
          <div class="friendTab" *ngFor="let friend of friendsToAdd">
             <img class="friendAvatar" src="assets/images/user3.png">
-            <div class="friendName">{{ friend.firstName }} {{ friend.lastName }}</div>
+            <div class="friendName">{{ friend.first_name }} {{ friend.last_name }}</div>
             <div class="friendAddress">{{ friend.city }}, {{ friend.country }}</div>
-            <button class="addFriendButton" (click)="onAddFriend($event)"><i class="pi pi-plus-circle"></i></button>
+            <button class="addFriendButton" (click)="onAddFriend($event, friend)"><i class="pi pi-plus-circle"></i></button>
         </div>
     </p-panel>
 </div>

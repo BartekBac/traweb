@@ -7,11 +7,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'password', 'first_name', 'last_name',
-                  'country', 'city', 'zip_code', 'last_login', 'date_joined')
+                  'country', 'city', 'zip_code', 'last_login', 'date_joined', 'friends')
         write_only_fields = ('password',)
         read_only_fields = ('id', 'last_login', 'date_joined')
 
     def create(self, validated_data):
+        print(validated_data)
         user = User.objects.create(
             email=validated_data['email'],
             username=validated_data['email'],
@@ -19,7 +20,8 @@ class UserSerializer(serializers.ModelSerializer):
             last_name=validated_data['last_name'],
             country=validated_data['country'],
             city=validated_data['city'],
-            zip_code=validated_data['zip_code']
+            zip_code=validated_data['zip_code'],
+            friends={} # is it needed here?
         )
 
         user.set_password(validated_data['password'])

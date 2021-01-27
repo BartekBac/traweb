@@ -30,4 +30,14 @@ export class UserService {
     );
   }
 
+  updateCurrentUser(user: User): Observable<User> {
+    return this.http.put<User>(this.baseUrl + user.id + '/', user)
+      .pipe(
+        map(res => Functions.getCamelCaseJSON(res)),
+        catchError(error => {
+          console.log(error);
+          return throwError(Functions.getErrorMessage(error));
+        })
+    );
+  }
 }

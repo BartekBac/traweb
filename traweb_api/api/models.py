@@ -6,6 +6,7 @@ class User(AbstractUser):
     country = models.CharField(max_length=254)
     city = models.CharField(max_length=254)
     zip_code = models.CharField(max_length=254)
+    friends = models.CharField(max_length=4096, blank=True)
 
 class Travel(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
