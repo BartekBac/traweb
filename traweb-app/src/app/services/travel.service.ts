@@ -20,14 +20,14 @@ export class TravelService {
 
   getCurrentUserTravels(): Travel[] {
     // TODO
-    /* return this.http.get<Travel>(this.baseUrl + 'current')
+    /*return this.http.get<Travel>(this.baseUrl + 'current')
       .pipe(
         map(res => Functions.getCamelCaseJSON(res)),
         catchError(error => {
           console.log(error);
           return throwError(Functions.getErrorMessage(error));
         })
-    ); */
+    );
     const travelPositions: TravelPosition[] = [];
     travelPositions.push({
       coordinates: {lat: 48, lng: 18},
@@ -55,9 +55,9 @@ export class TravelService {
       description: 'opis',
       mainImage: '',
       pictures: ['sdsd', 'sdsd'],
-    });
+    });*/
     const travels: Travel[] = [];
-    travels.push({
+    /*travels.push({
       name: 'podroz',
       beginDate: new Date(),
       endDate: new Date(),
@@ -92,7 +92,7 @@ export class TravelService {
       opinions: [],
       countries: [],
       cities: [],
-    });
+    });*/
     return travels;
   }
   addTravel(travel: TravelDto): Observable<Travel> {

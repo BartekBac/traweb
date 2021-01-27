@@ -4,7 +4,7 @@
   </p-header>
   <div class="p-grid">
     <div class="p-col-8">
-      <p-carousel *ngIf="travel.travelPositions" [ngClass]="travel.travelPositions.length <= 3 ? 'm-hidden-indicators': 'm-indicators'" [value]="travel.travelPositions" [numVisible]="2">
+      <p-carousel *ngIf="travel.positions" [ngClass]="travel.positions.length <= 3 ? 'm-hidden-indicators': 'm-indicators'" [value]="travel.positions" [numVisible]="2">
         <ng-template let-position pTemplate="item">
           <div class="p-grid m-carousel-item-container">
             <div class="p-col-5">
