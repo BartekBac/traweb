@@ -1,0 +1,5 @@
+djoser
+djangorestframework
+django-cors-headers
+drf-extensions
+drf-writable-nested

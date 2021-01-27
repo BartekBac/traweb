@@ -1,0 +1,18 @@
+.m-item-container {
+  border: 1px solid var(--text-color);
+  margin-top: 10px;
+}
+
+.m-carousel-item-container {
+  border: 1px solid var(--text-color);
+  margin: 3px;
+}
+
+.m-panel {
+  margin: 10px;
+}
+
+.m-type-icon {
+  margin-left: 2px;
+}
+
