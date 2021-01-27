@@ -1,0 +1,49 @@
+<p-panel class="m-panel" *ngFor="let travel of travels">
+  <p-header>
+    <b>{{ travel.name }}</b> ({{ travel.beginDate | date:'dd MMMM yyyy' }} - {{ travel.endDate | date:'dd MMMM yyyy' }})
+  </p-header>
+  <div class="p-grid">
+    <div class="p-col-8">
+      <p-carousel *ngIf="travel.travelPositions" [ngClass]="travel.travelPositions.length <= 3 ? 'm-hidden-indicators': 'm-indicators'" [value]="travel.travelPositions" [numVisible]="2">
+        <ng-template let-position pTemplate="item">
+          <div class="p-grid m-carousel-item-container">
+            <div class="p-col-5">
+              <span>{{ position.name }}</span>
+            </div>
+            <div class="p-col-1">
+              <i class="m-type-icon material-icons-round">
+                {{ position.type | travelPositionType:'icon' }}
+              </i>
+            </div>
+            <div class="p-col-6">
+              <p-rating [(ngModel)]="position.rating" [cancel]="false" [readonly]="true" [stars]="7"></p-rating>
+            </div>
+            <div class="p-col-12">
+              <p-tabView>
+                <p-tabPanel header="Images">
+                  <p-galleria *ngIf="position.pictures.length > 0" [(value)]="position.pictures" [containerStyle]="{'max-width': '640px'}" [numVisible]="5"
+                    [circular]="true" [showItemNavigators]="true" [showThumbnails]="false">
+                    <ng-template pTemplate="item" let-item>
+                      <img [src]="item" style="width: 100%; display: block;" />
+                    </ng-template>
+                    <ng-template pTemplate="thumbnail" let-item>
+                      <div class="p-grid p-nogutter p-justify-center">
+                        <img [src]="item" style="display: block;" />
+                      </div>
+                    </ng-template>
+                  </p-galleria>
+                </p-tabPanel>
+                <p-tabPanel header="Details">
+                  {{ position.description }}
+                </p-tabPanel>
+              </p-tabView>
+            </div>
+          </div>
+        </ng-template>
+      </p-carousel>
+    </div>
+    <div class="p-col-4 m-item-container">
+      <div>opinions</div>
+    </div>
+  </div>
+</p-panel>

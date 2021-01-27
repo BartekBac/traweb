@@ -26,7 +26,7 @@ export class UploadImageComponent implements OnInit {
   constructor(private toastService: MessageService) {}
 
   ngOnInit(): void {
-    if(this.showContent) {
+    if (this.showContent) {
       this.mode = 'advanced';
     } else {
       this.mode = 'basic';

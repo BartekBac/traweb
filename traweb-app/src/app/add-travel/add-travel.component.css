@@ -39,3 +39,13 @@
 .m-textarea {
   resize: none;
 }
+
+.m-map-select {
+  top: 25px
+}
+
+.m-img-flag {
+  float: left;
+  margin-right: 10px;
+  width: 24px;
+}
