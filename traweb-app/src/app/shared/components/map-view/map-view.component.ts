@@ -9,7 +9,7 @@ import { Constants } from '../../constants/Constants';
 })
 export class MapViewComponent implements AfterViewInit {
 
-  @Input() markers: MapMarker[];
+  @Input() markers: MapMarker;
   @Input() width = 800;
   @Input() height = 600;
 
@@ -32,9 +32,7 @@ export class MapViewComponent implements AfterViewInit {
     });
     tiles.addTo(this.map);
     this.setCurrentPosition();
-    this.markers.forEach(marker => {
-      this.addMarker(marker.lat, marker.lng, marker.title, marker.onClickFunction);
-    });
+    this.addMarker(this.markers.lat, this.markers.lng, '', this.markers.onClickFunction);
     this.map.on('geosearch_showlocation', (result: any) => {
       L.marker([result.x, result.y]).addTo(this.map);
     });

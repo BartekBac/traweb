@@ -13,7 +13,8 @@ const routes: Routes = [
   {path: 'register', component: RegisterComponent},
   {path: 'home', component: HomeComponent, resolve: {currentUser: CurrentUserResolver}},
   {path: 'my-travels/add', component: AddTravelComponent},
-  {path: 'my-travels', component: ExploreTravelsComponent}
+  {path: 'my-travels', component: ExploreTravelsComponent, resolve: {currentUser: CurrentUserResolver}, data : {my : true}},
+  {path: 'travels', component: ExploreTravelsComponent, resolve: {currentUser: CurrentUserResolver}, data : {my : false}}
 ];
 
 @NgModule({

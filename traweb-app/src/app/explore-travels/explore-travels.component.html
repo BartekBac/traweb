@@ -1,6 +1,19 @@
+<p-panel class="m-panel" *ngIf="my">
+  <p-header>
+    <b>My travels</b>
+  </p-header>
+</p-panel>
+
+<p-panel class="m-panel" *ngIf="!my">
+  <p-header>
+    <b>Other users travels</b>
+  </p-header>
+</p-panel>
+
 <p-panel class="m-panel" *ngFor="let travel of travels">
   <p-header>
-    <b>{{ travel.name }}</b> ({{ travel.beginDate | date:'dd MMMM yyyy' }} - {{ travel.endDate | date:'dd MMMM yyyy' }})
+    <b>{{ travel.name }}</b> ({{ travel.beginDate }} - {{ travel.endDate }}) 
+    <span style="margin-left: 30px" *ngIf="!my"> Travel of {{ getUser(travel.user).firstName }} {{ getUser(travel.user).lastName }}</span>
   </p-header>
   <div class="p-grid">
     <div class="p-col-8">
@@ -34,6 +47,10 @@
                   </p-galleria>
                 </p-tabPanel>
                 <p-tabPanel header="Details">
+                  <!-- <app-map-view [(markers)]="position.coordinates" [width]="200" [height]="150"></app-map-view> -->
+                  {{ getCountryName(position.countryCode) }} - {{ position.city }}
+                </p-tabPanel>
+                <p-tabPanel header="Description">
                   {{ position.description }}
                 </p-tabPanel>
               </p-tabView>
@@ -43,7 +60,35 @@
       </p-carousel>
     </div>
     <div class="p-col-4 m-item-container">
-      <div>opinions</div>
+      <div class="p-grid">
+        <div class="p-col-11" style="margin-right: -10px">
+          <span>Opinie użytkowników</span>
+        </div>
+        <div class="p-col-1" style="margin-bottom: 5px">
+          <button *ngIf="!my" (click)="showAddOpinionDialog(travel.id)" style="margin-right: 10px" pButton type="button" icon="pi pi-plus-circle"></button>
+        </div>
+      </div>
+      <div class="p-grid opinions-column">
+        <div class="p-col-12 m-opinion-container" *ngFor="let opinionFromList of travel.opinions">
+          <p-toggleButton onIcon="pi pi-thumbs-up" offIcon="pi pi-thumbs-down"
+      [(ngModel)]="opinionFromList.isPositive" style="margin-right: 10px" [disabled]="true"></p-toggleButton>
+          {{ opinionFromList.description }}
+        </div>
+      </div>
     </div>
   </div>
 </p-panel>
+
+<p-dialog header="New opinion" [(visible)]="display">
+  <div class="p-grid">
+    <div class="p-col-12">
+      <textarea [id]="opinion" class="m-textarea" rows="4"
+        cols="60" [(ngModel)]="opinion.description" pInputTextarea></textarea>
+    </div>
+  </div>
+  <p-footer>
+    <p-toggleButton onIcon="pi pi-thumbs-up" offIcon="pi pi-thumbs-down"
+      [(ngModel)]="opinion.isPositive" style="margin-right: 10px"></p-toggleButton>
+    <button pButton type="button" label="Save" (click)="saveOpinion()"></button>
+  </p-footer>
+</p-dialog>

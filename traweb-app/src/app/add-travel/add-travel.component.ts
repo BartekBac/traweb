@@ -171,7 +171,7 @@ export class AddTravelComponent implements OnInit {
   private deleteArrayDuplicates(array: any[]): any[] {
     return array.filter((elem, index, self) => {
       return index === self.indexOf(elem);
-    })
+    });
   }
 
   updateInvolvedCities(): void {
