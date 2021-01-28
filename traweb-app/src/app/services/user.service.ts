@@ -19,6 +19,10 @@ export class UserService {
     return this.http.get<User>(this.baseUrl + id);
   }
 
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.baseUrl);
+  }
+
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(this.baseUrl + 'current')
       .pipe(
