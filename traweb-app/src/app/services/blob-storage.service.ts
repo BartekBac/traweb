@@ -17,15 +17,14 @@ export class BlobStorageService {
     this.blobClient = new BlobServiceClient(Constants.BLOB_STORAGE_CONNECTION_STRING);
   }
 
-  async uploadImage(file: File){
+  async uploadImage(file: File): Promise<string>{
     const containerClient = this.blobClient.getContainerClient('images');
 
     const blobName = new Date().getTime() + file.name;
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const uploadBlobResponse = await blockBlobClient.upload(file, file.size);
-
-    console.log(blockBlobClient.url);
-
     console.log(uploadBlobResponse);
+
+    return blockBlobClient.url;
   }
 }

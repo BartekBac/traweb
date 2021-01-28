@@ -42,7 +42,7 @@ export class AddTravelComponent implements OnInit {
 
   addPosition: TravelPosition = {
     id: -1000,
-    coordinates: {lat: 0, lng: 0},
+    coordinates: { lat: 0, lng: 0 },
     name: 'add-new',
     type: 0,
     rating: 0,
@@ -65,7 +65,7 @@ export class AddTravelComponent implements OnInit {
     private userService: UserService,
     private datepipe: DatePipe,
     private blobStorageService: BlobStorageService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.travelPositionTypes = this.getTravelPosiotionTypes();
@@ -90,7 +90,7 @@ export class AddTravelComponent implements OnInit {
   private setPropertiesFromResponse(travel: Travel): void {
     this.travel = travel;
     this.travelPositions = travel.positions ?? [];
-    if (this.editMode) {this.travelPositions.push(this.addPosition); }
+    if (this.editMode) { this.travelPositions.push(this.addPosition); }
     this.travel.user = (travel.user as User).id;
   }
 
@@ -101,9 +101,9 @@ export class AddTravelComponent implements OnInit {
   getTravelPosiotionTypes(): SelectItem[] {
     const travelPositionPipe = new TravelPositionTypePipe();
     return [
-      {value: TravelPositionType.AccommodationPlace, label: travelPositionPipe.transform(TravelPositionType.AccommodationPlace, 'name')},
-      {value: TravelPositionType.DiningPlace, label: travelPositionPipe.transform(TravelPositionType.DiningPlace, 'name')},
-      {value: TravelPositionType.TouristAttraction, label: travelPositionPipe.transform(TravelPositionType.TouristAttraction, 'name')},
+      { value: TravelPositionType.AccommodationPlace, label: travelPositionPipe.transform(TravelPositionType.AccommodationPlace, 'name') },
+      { value: TravelPositionType.DiningPlace, label: travelPositionPipe.transform(TravelPositionType.DiningPlace, 'name') },
+      { value: TravelPositionType.TouristAttraction, label: travelPositionPipe.transform(TravelPositionType.TouristAttraction, 'name') },
     ];
   }
 
@@ -159,7 +159,7 @@ export class AddTravelComponent implements OnInit {
         lng: tp.coordinates.lng,
         title: tp.name,
         editable: false,
-        onClickFunction: () => {}
+        onClickFunction: () => { }
       };
       return marker;
     });
@@ -178,39 +178,57 @@ export class AddTravelComponent implements OnInit {
 
   updateInvolvedCities(): void {
     this.geocodingService.reverse(this.selectedTravelPosition.coordinates.lat, this.selectedTravelPosition.coordinates.lng)
-    .subscribe(
-      res => {
-        this.selectedTravelPosition.city = res.name;
-        this.selectedTravelPosition.countryCode = res.countryCode;
-      },
-      err => {
-        console.error(err);
-      },
-      (/*complete*/) => {
-        this.travel.cities = [];
-        this.travel.countryCodes = [];
-        this.getRealTravelPositions().forEach(
-          tp => {
-            this.travel.cities?.push(tp.city ?? '');
-            this.travel.countryCodes?.push(tp.countryCode ?? '');
-          }
-        );
+      .subscribe(
+        res => {
+          this.selectedTravelPosition.city = res.name;
+          this.selectedTravelPosition.countryCode = res.countryCode;
+        },
+        err => {
+          console.error(err);
+        },
+        (/*complete*/) => {
+          this.travel.cities = [];
+          this.travel.countryCodes = [];
+          this.getRealTravelPositions().forEach(
+            tp => {
+              this.travel.cities?.push(tp.city ?? '');
+              this.travel.countryCodes?.push(tp.countryCode ?? '');
+            }
+          );
 
-        this.travel.cities = this.deleteArrayDuplicates(this.travel.cities);
-        this.travel.countryCodes = this.deleteArrayDuplicates(this.travel.countryCodes);
-      }
-    );
+          this.travel.cities = this.deleteArrayDuplicates(this.travel.cities);
+          this.travel.countryCodes = this.deleteArrayDuplicates(this.travel.countryCodes);
+        }
+      );
   }
 
   getCountryName(countryCode: string): string {
     return this.countriesService.getCountry(countryCode)?.name ?? '';
   }
 
-  onImageUpload(image: File, travelPosition: TravelPosition): void {
-    console.log(image);
-    console.log(travelPosition);
+  setTravelPositionImage(positionId: number, imageUrl: string){
+    const travelPositionToEdit = this.travelPositions.find(tp => tp.id === positionId);
+    if(!!travelPositionToEdit){
+      if(!travelPositionToEdit.mainImage || travelPositionToEdit.mainImage === ''){
+        travelPositionToEdit.mainImage = imageUrl;
+      }
+      else{
+        travelPositionToEdit.pictures?.push(imageUrl);
+      }
+    }
+  }
 
-    this.blobStorageService.uploadImage(image)
+  onImageUpload(image: File, travelPosition: TravelPosition): void {
+    console.log(travelPosition);
+    this.blobStorageService.uploadImage(image).then((url: string) => {
+      this.toastService.add({ severity: 'success', summary: 'Image has been uploaded', life: 2000, detail: image.name })
+      this.setTravelPositionImage(travelPosition.id, url)
+      console.log(this.travelPositions);
+    },
+      (err) => {
+        this.toastService.add({ severity: 'error', summary: 'Uploading image failed', detail: err, life: 20000, closable: true })
+      }
+    );
   }
 
   addTravelPosition(): void {
@@ -236,7 +254,8 @@ export class AddTravelComponent implements OnInit {
       if (typeof this.travel.user !== 'number') {
         this.toastService.add({
           severity: 'warn', summary: 'Cannot save travel', life: 7000, closable: true,
-           detail: 'Problem encountered when trying to fetch a user from the server'});
+          detail: 'Problem encountered when trying to fetch a user from the server'
+        });
       } else {
         // add new travel
         const newTravel: TravelDto = {
@@ -263,18 +282,18 @@ export class AddTravelComponent implements OnInit {
         };
         this.travelService.addTravel(newTravel).subscribe(
           res => {
-            this.toastService.add({severity: 'success', summary: 'Travel save succeeded', life: 2000, detail: res.name});
+            this.toastService.add({ severity: 'success', summary: 'Travel save succeeded', life: 2000, detail: res.name });
             this.setPropertiesFromResponse(res);
           },
-          err => this.toastService.add({severity: 'error', summary: 'Travel save failed', detail: err, life: 20000, closable: true})
+          err => this.toastService.add({ severity: 'error', summary: 'Travel save failed', detail: err, life: 20000, closable: true })
         );
       }
     } else {
       // update existing travel
       this.travel.positions = this.getRealTravelPositions();
       this.travelService.updateTravel(this.travel).subscribe(
-        res => this.toastService.add({severity: 'success', summary: 'Travel update succeeded', life: 2000}),
-        err => this.toastService.add({severity: 'error', summary: 'Travel update failed', detail: err, life: 20000, closable: true}),
+        res => this.toastService.add({ severity: 'success', summary: 'Travel update succeeded', life: 2000 }),
+        err => this.toastService.add({ severity: 'error', summary: 'Travel update failed', detail: err, life: 20000, closable: true }),
         (/*complete*/) => this.travel.positions?.push(this.addPosition)
       );
     }
