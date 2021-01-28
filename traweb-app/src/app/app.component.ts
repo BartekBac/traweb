@@ -1,8 +1,5 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
 import { AuthService } from './auth/services/auth.service';
-(window as any).global = window;
-// @ts-ignore
-window.Buffer = window.Buffer || require('buffer').Buffer;
 import { NgSimpleSidebarService, SimpleSidebarPosition, SimpleSidebarItem, SimpleSidebarConfiguration } from 'ng-simple-sidebar';
 
 @Component({

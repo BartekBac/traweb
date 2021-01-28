@@ -22,8 +22,7 @@ export class BlobStorageService {
 
     const blobName = new Date().getTime() + file.name;
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
-    const uploadBlobResponse = await blockBlobClient.upload(file, file.size);
-    console.log(uploadBlobResponse);
+    await blockBlobClient.upload(file, file.size);
 
     return blockBlobClient.url;
   }

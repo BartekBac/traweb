@@ -219,11 +219,9 @@ export class AddTravelComponent implements OnInit {
   }
 
   onImageUpload(image: File, travelPosition: TravelPosition): void {
-    console.log(travelPosition);
     this.blobStorageService.uploadImage(image).then((url: string) => {
       this.toastService.add({ severity: 'success', summary: 'Image has been uploaded', life: 2000, detail: image.name })
       this.setTravelPositionImage(travelPosition.id, url)
-      console.log(this.travelPositions);
     },
       (err) => {
         this.toastService.add({ severity: 'error', summary: 'Uploading image failed', detail: err, life: 20000, closable: true })
