@@ -32,7 +32,6 @@ import { FlagImagePipe } from './pipes/flag-image.pipe';
 import { InputWithValidatorComponent } from './shared/components/input-with-validator/input-with-validator.component';
 import { MessageService } from 'primeng/api';
 import { TokenInterceptor } from './interceptors/token.interceptor';
-import { BodyInterceptor } from './interceptors/body.interceptor';
 import { HomeComponent } from './home/home.component';
 import { NgSimpleSidebarModule } from 'ng-simple-sidebar';
 import { CurrentUserResolver } from './resolvers/current-user.resolver';
@@ -90,7 +89,6 @@ import { DatePipe } from '@angular/common';
   ],
   providers: [MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: BodyInterceptor, multi: true },
     CurrentUserResolver,
     DatePipe
   ],

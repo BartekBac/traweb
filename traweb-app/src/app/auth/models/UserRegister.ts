@@ -1,9 +1,9 @@
 export class UserRegister {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
+  first_name: string;
+  last_name: string;
   country: string;
   city: string;
-  zipCode: string;
+  zip_code: string;
 }

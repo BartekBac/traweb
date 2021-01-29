@@ -175,11 +175,11 @@ export class RegisterComponent implements OnInit {
       const userRegister: UserRegister = {
         email: this.email,
         password: this.password,
-        firstName: this.firstName,
-        lastName: this.lastName,
+        first_name: this.firstName,
+        last_name: this.lastName,
         country: this.selectedCountry.name,
         city: this.selectedCity.name,
-        zipCode: this.selectedZipCode
+        zip_code: this.selectedZipCode
       }
       this.authService.register(userRegister).subscribe(
         res => this.toastService.add({severity: 'success', summary: 'Register succeeded', detail: 'Redirecting to login page...'}),
