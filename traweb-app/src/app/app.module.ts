@@ -19,6 +19,8 @@ import { TabViewModule } from 'primeng/tabview';
 import { ChipsModule } from 'primeng/chips';
 import { CalendarModule } from 'primeng/calendar';
 import { GalleriaModule } from 'primeng/galleria';
+import { DialogModule } from 'primeng/dialog';
+import { ToggleButtonModule } from 'primeng/togglebutton';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -82,7 +84,9 @@ import { DatePipe } from '@angular/common';
     TabViewModule,
     ChipsModule,
     CalendarModule,
-    GalleriaModule
+    GalleriaModule,
+    DialogModule,
+    ToggleButtonModule
   ],
   providers: [MessageService,
     { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true },
