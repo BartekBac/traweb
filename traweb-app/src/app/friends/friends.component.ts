@@ -53,7 +53,7 @@ export class FriendsComponent implements OnInit {
     this.yourFriends = [];
     this.friendsToAdd = [];
 
-    this.userService.getCurrentUserSnake().subscribe(res => {
+    this.userService.getCurrentUser().subscribe(res => {
       this.currentUser = res;
       let friends = this.currentUser.friends.length > 0 ? this.currentUser.friends.split(',') : [];
 
