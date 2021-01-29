@@ -53,17 +53,35 @@ export class FriendsComponent implements OnInit {
     this.yourFriends = [];
     this.friendsToAdd = [];
 
-    this.userService.getCurrentUserSnake().subscribe(res => {
-      this.currentUser = res;
+    this.userService.getCurrentUserSnakeCase().subscribe(result => {
+      this.currentUser = this.mapUserObject(result);
       let friends = this.currentUser.friends.length > 0 ? this.currentUser.friends.split(',') : [];
 
-      Promise.all(friends.map(friendID => this.userService.getUser(Number(friendID)).toPromise().then(user => this.yourFriends.push(user))))
+      Promise.all(friends.map(friendID => this.userService.getUser(Number(friendID)).toPromise().then(user => this.yourFriends.push(this.mapUserObject(user)))))
       .then(() => {
         this.userService.getAllUsers().subscribe(users => {
           let yourFriendsIDs = this.yourFriends.map(friend => friend.id);
-          this.friendsToAdd = users.filter(user => user.id !== this.currentUser.id && yourFriendsIDs.indexOf(user.id) === -1);
+          this.friendsToAdd = users
+            .filter(user => user.id !== this.currentUser.id && yourFriendsIDs.indexOf(user.id) === -1)
+            .map(user => this.mapUserObject(user));
         });
       })
     });
+  }
+
+  mapUserObject(receivedUser: any): User {
+    return {
+      id: receivedUser.id,
+      firstName: receivedUser.first_name,
+      lastName: receivedUser.last_name,
+      email: receivedUser.email,
+      password: receivedUser.password,
+      country: receivedUser.country,
+      city: receivedUser.city,
+      zipCode: receivedUser.zip_code,
+      lastLogin: receivedUser.last_login,
+      dateJoined: receivedUser.date_joined,
+      friends: receivedUser.friends
+    }
   }
 }

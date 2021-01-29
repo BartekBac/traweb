@@ -34,7 +34,7 @@ export class UserService {
     );
   }
 
-  getCurrentUserSnake(): Observable<User> {
+  getCurrentUserSnakeCase(): Observable<User> {
     return this.http.get<User>(this.baseUrl + 'current');
   }
 
