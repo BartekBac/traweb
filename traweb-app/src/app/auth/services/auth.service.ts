@@ -40,9 +40,8 @@ export class AuthService {
   login(userLogin: UserLogin): Observable<LoginResponse> {
     return this.http.post<LoginResponse>(this.baseUrl + 'auth/token/login', userLogin)
     .pipe(
-      map(response => Functions.getCamelCaseJSON(response)),
       tap(response => {
-        localStorage.setItem(Constants.LOCAL_STORAGE_AUTH_TOKEN, response.authToken);
+        localStorage.setItem(Constants.LOCAL_STORAGE_AUTH_TOKEN, response.auth_token);
         this.router.navigate(['/home']);
       }),
       catchError(error => {

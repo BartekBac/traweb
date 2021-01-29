@@ -4,8 +4,6 @@ import { MessageService, SelectItem } from 'primeng/api';
 import { OverlayPanel } from 'primeng/overlaypanel';
 import { TravelPositionType } from '../enums/TravelPositionType';
 import { Coordinates } from '../models/Coordinates';
-import { TravelDto } from '../models/dtos/TravelDto';
-import { TravelPositionDto } from '../models/dtos/TravelPositionDto';
 import { MapMarker } from '../models/MapMarker';
 import { Travel } from '../models/Travel';
 import { TravelPosition } from '../models/TravelPosition';
@@ -75,7 +73,7 @@ export class AddTravelComponent implements OnInit {
         res => this.travel.user = res.id
       );
     }
-    /*this.travelService.getTravel(47).subscribe(
+    /*this.travelService.getTravel(58).subscribe(
       res => {
         this.setPropertiesFromResponse(res);
       },
@@ -206,7 +204,7 @@ export class AddTravelComponent implements OnInit {
     return this.countriesService.getCountry(countryCode)?.name ?? '';
   }
 
-  setTravelPositionImage(positionId: number, imageUrl: string){
+  setTravelPositionImage(positionId: number, imageUrl: string): void{
     const travelPositionToEdit = this.travelPositions.find(tp => tp.id === positionId);
     if(!!travelPositionToEdit){
       if(!travelPositionToEdit.mainImage || travelPositionToEdit.mainImage === ''){
@@ -256,29 +254,8 @@ export class AddTravelComponent implements OnInit {
         });
       } else {
         // add new travel
-        const newTravel: TravelDto = {
-          name: this.travel.name,
-          user: this.travel.user,
-          beginDate: this.travel.beginDate ?? '',
-          endDate: this.travel.endDate ?? '',
-          cities: this.travel.cities ?? [],
-          countryCodes: this.travel.countryCodes ?? [],
-          positions: this.getRealTravelPositions().map<TravelPositionDto>(tp => {
-            const position: TravelPositionDto = {
-              name: tp.name,
-              coordinates: tp.coordinates,
-              type: tp.type,
-              rating: tp.rating,
-              description: tp.description ?? '',
-              mainImage: tp.mainImage ?? '',
-              pictures: tp.pictures ?? [],
-              city: tp.city ?? '',
-              countryCode: tp.countryCode ?? ''
-            };
-            return position;
-          })
-        };
-        this.travelService.addTravel(newTravel).subscribe(
+        this.travel.positions = this.getRealTravelPositions();
+        this.travelService.addTravel(this.travel).subscribe(
           res => {
             this.toastService.add({ severity: 'success', summary: 'Travel save succeeded', life: 2000, detail: res.name });
             this.setPropertiesFromResponse(res);

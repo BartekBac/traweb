@@ -1,3 +1,3 @@
 export class LoginResponse {
-  authToken: string;
+  auth_token: string;
 }
