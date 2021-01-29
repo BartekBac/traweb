@@ -33,3 +33,8 @@ class TravelPosition(models.Model):
     pictures = models.CharField(max_length=4096, blank=True)
     country_code = models.CharField(max_length=256, blank=True)
     city = models.CharField(max_length=256, blank=True)
+
+class Opinion(models.Model):
+    travel = models.ForeignKey(Travel, related_name='opinions', on_delete=models.CASCADE)
+    is_positive = models.BooleanField()
+    description = models.CharField(max_length=2048, blank=True)

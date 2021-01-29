@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from drf_writable_nested.serializers import WritableNestedModelSerializer
-from .models import User, Travel, Coordinates, TravelPosition
+from .models import User, Travel, Coordinates, TravelPosition, Opinion
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -39,16 +39,23 @@ class TravelPositionSerializer(WritableNestedModelSerializer):
         fields = ('id', 'name', 'coordinates', 'type', 'rating',
          'description', 'main_image', 'pictures', 'country_code', 'city')
 
+class OpinionSerializer(WritableNestedModelSerializer):
+    class Meta:
+        model = Opinion
+        fields = ('is_positive', 'description')
+
 class TravelSerializer(WritableNestedModelSerializer):
     begin_date = serializers.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601']) # to do wywalenia 
     end_date = serializers.DateField(format="%d-%m-%Y", input_formats=['%d-%m-%Y', 'iso-8601'])
     positions = TravelPositionSerializer(many=True)
+    opinions = OpinionSerializer(many = True)
     class Meta:
         model = Travel
-        fields = ('id', 'user', 'name', 'begin_date', 'end_date', 'country_codes', 'cities', 'positions',)
+        fields = ('id', 'user', 'name', 'begin_date', 'end_date', 'country_codes', 'cities', 'positions', 'opinions')
         read_only_fields = ('id',)
 
     
     def to_representation(self, instance):
         self.fields['user'] =  UserSerializer(read_only=True)
         return super(TravelSerializer, self).to_representation(instance)
+
