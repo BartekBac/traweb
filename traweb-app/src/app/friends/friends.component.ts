@@ -15,8 +15,6 @@ export class FriendsComponent implements OnInit {
   friendsToAdd: User[];
 
   onAddFriend(event: any, friend: User): void {
-    console.log("Adding a friend...");
-
     let userToUpdate = this.currentUser;
     userToUpdate.friends = userToUpdate.friends.length > 0 ? userToUpdate.friends + ',' + friend.id : `${friend.id}`;
 
@@ -24,8 +22,24 @@ export class FriendsComponent implements OnInit {
     this.yourFriends.push(friend);
 
     this.userService.updateCurrentUser(userToUpdate).subscribe(
+      res => setTimeout(() => this.toastService.add({severity: 'success', summary: 'You have a new friend!', life: 2000}), 1000),
+      err => this.toastService.add({severity: 'error', summary: 'Failed to add a friend.', detail: err, life: 20000, closable: true}),
+      () => setTimeout(() => this.toastService.add({severity: 'success', summary: 'You have a new friend!', life: 2000}), 1000),
+    );
+  }
+
+  onRemoveFriend(event: any, friend: User): void {
+    let userToUpdate = this.currentUser;
+    let IDsTable = userToUpdate.friends.split(',');
+    userToUpdate.friends = this.removeItemFromArray(IDsTable, friend.id).join(',');
+
+    this.friendsToAdd.push(friend);
+    this.yourFriends = this.removeItemFromArray(this.yourFriends, friend);
+
+    this.userService.updateCurrentUser(userToUpdate).subscribe(
       res => this.toastService.add({severity: 'success', summary: 'You have a new friend!', life: 2000}),
-      err => this.toastService.add({severity: 'error', summary: 'Failed to add a friend.', detail: err, life: 20000, closable: true})
+      err => this.toastService.add({severity: 'error', summary: 'Failed to add a friend.', detail: err, life: 20000, closable: true}),
+      () => this.toastService.add({severity: 'success', summary: 'You have a new friend!', life: 2000}),
     );
   }
 
@@ -33,7 +47,9 @@ export class FriendsComponent implements OnInit {
     return array.filter(arrayItem => arrayItem != item);
   }
 
-  constructor(private http: HttpClient, private userService: UserService, private toastService: MessageService) { 
+  constructor(private http: HttpClient, private userService: UserService, private toastService: MessageService) {  }
+
+  ngOnInit(): void {
     this.yourFriends = [];
     this.friendsToAdd = [];
 
@@ -41,16 +57,13 @@ export class FriendsComponent implements OnInit {
       this.currentUser = res;
       let friends = this.currentUser.friends.length > 0 ? this.currentUser.friends.split(',') : [];
 
-      Promise.all(friends.map(friendID => userService.getUser(Number(friendID)).toPromise().then(user => this.yourFriends.push(user))))
+      Promise.all(friends.map(friendID => this.userService.getUser(Number(friendID)).toPromise().then(user => this.yourFriends.push(user))))
       .then(() => {
-        userService.getAllUsers().subscribe(users => {
+        this.userService.getAllUsers().subscribe(users => {
           let yourFriendsIDs = this.yourFriends.map(friend => friend.id);
           this.friendsToAdd = users.filter(user => user.id !== this.currentUser.id && yourFriendsIDs.indexOf(user.id) === -1);
         });
       })
     });
-  }
-
-  ngOnInit(): void {
   }
 }

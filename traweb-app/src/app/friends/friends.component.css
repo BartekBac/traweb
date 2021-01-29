@@ -75,3 +75,17 @@
     width:32px;
     margin: auto;
 }
+
+.removeFriendButton {
+    grid-column-start: 4;
+    grid-column-end: 5;
+    grid-row-start: 1;
+    grid-row-end: 3;
+
+    width:32px;
+    margin: auto;
+}
+
+.header {
+    font-weight: bold;
+}
