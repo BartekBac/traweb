@@ -19,6 +19,10 @@ export class UserService {
     return this.http.get<User>(this.baseUrl + id);
   }
 
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.baseUrl);
+  }
+
   getCurrentUser(): Observable<User> {
     return this.http.get<User>(this.baseUrl + 'current')
       .pipe(
@@ -30,4 +34,18 @@ export class UserService {
     );
   }
 
+  getCurrentUserSnake(): Observable<User> {
+    return this.http.get<User>(this.baseUrl + 'current');
+  }
+
+  updateCurrentUser(user: User): Observable<User> {
+    return this.http.put<User>(this.baseUrl + user.id + '/', user)
+      .pipe(
+        map(res => Functions.getCamelCaseJSON(res)),
+        catchError(error => {
+          console.log(error);
+          return throwError(Functions.getErrorMessage(error));
+        })
+    );
+  }
 }

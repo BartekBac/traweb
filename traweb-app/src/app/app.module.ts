@@ -41,9 +41,9 @@ import { TravelPositionTypePipe } from './pipes/travel-position-type.pipe';
 import { UploadImageComponent } from './shared/components/upload-image/upload-image.component';
 import { MapSelectComponent } from './shared/components/map-select/map-select.component';
 import { MapViewComponent } from './shared/components/map-view/map-view.component';
+import { FriendsComponent } from './friends/friends.component';
 import { ExploreTravelsComponent } from './explore-travels/explore-travels.component';
 import { DatePipe } from '@angular/common';
-
 
 @NgModule({
   declarations: [
@@ -58,6 +58,7 @@ import { DatePipe } from '@angular/common';
     UploadImageComponent,
     MapSelectComponent,
     MapViewComponent,
+    FriendsComponent,
     ExploreTravelsComponent
   ],
   imports: [

@@ -1,0 +1,27 @@
+<div class="container">
+    <p-panel class="friendsListPanel">
+        <p-header class="header">
+           Your friends
+        </p-header>
+
+        <div class="friendTab" *ngFor="let friend of yourFriends">
+            <img class="friendAvatar" src="assets/images/user3.png">
+            <div class="friendName">{{ friend.first_name }} {{ friend.last_name }}</div>
+            <div class="friendAddress">{{ friend.city }}, {{ friend.country }}</div>
+            <button class="removeFriendButton" (click)="onRemoveFriend($event, friend)"><i class="pi pi-minus-circle"></i></button>
+        </div>
+    </p-panel>
+
+    <p-panel class=addFriendsPanel>
+        <p-header class="header">
+            Add friends
+         </p-header>
+
+         <div class="friendTab" *ngFor="let friend of friendsToAdd">
+            <img class="friendAvatar" src="assets/images/user3.png">
+            <div class="friendName">{{ friend.first_name }} {{ friend.last_name }}</div>
+            <div class="friendAddress">{{ friend.city }}, {{ friend.country }}</div>
+            <button class="addFriendButton" (click)="onAddFriend($event, friend)"><i class="pi pi-plus-circle"></i></button>
+        </div>
+    </p-panel>
+</div>

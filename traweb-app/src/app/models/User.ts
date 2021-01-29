@@ -9,4 +9,5 @@ export class User {
   zipCode: string;
   lastLogin: Date;
   dateJoined: Date;
+  friends: string;
 }

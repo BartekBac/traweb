@@ -60,6 +60,7 @@ export class AuthService {
       }),
       catchError(error => {
         console.log(error);
+        localStorage.removeItem(Constants.LOCAL_STORAGE_AUTH_TOKEN);
         return throwError(Functions.getErrorMessage(error));
       })
     );
