@@ -21,7 +21,7 @@ class UserSerializer(serializers.ModelSerializer):
             country=validated_data['country'],
             city=validated_data['city'],
             zip_code=validated_data['zip_code'],
-            friends="" # is it needed here?
+            friends=""
         )
 
         user.set_password(validated_data['password'])
