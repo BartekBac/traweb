@@ -1,3 +1,16 @@
 .m-center-content {
   text-align: center;
 }
+
+.m-center-content .p-fileupload .p-fileupload-content {
+  padding: 0;
+}
+
+.p-fileupload-content {
+  padding: 0;
+}
+
+#image {
+  max-height: 100px;
+  width: auto;
+}
