@@ -49,3 +49,8 @@
   margin-right: 10px;
   width: 24px;
 }
+
+.tabs-container .p-tabview .p-tabview-panels {
+  max-height: 250px;
+  padding-bottom: 0.5rem;
+}

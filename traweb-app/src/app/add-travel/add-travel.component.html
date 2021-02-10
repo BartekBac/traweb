@@ -57,7 +57,7 @@
           <ng-template #contentBlock>
             <div class="m-carousel-item-container">
               <div class="m-inside-carousel">
-                <p-tabView>
+                <p-tabView class="tabs-container">
                   <p-tabPanel header="General">
                     <div class="p-fluid">
                       <div class="p-field p-col-12 p-grid">
@@ -98,10 +98,10 @@
                       </div>
                     </div>
                   </p-tabPanel>
-                  <p-tabPanel header="Images">
+                  <p-tabPanel header="Images" class="add-image-panel">
                     <div class="p-fluid">
                       <div class="p-field p-col-12">
-                        <app-upload-image [imageSrc]="travelPosition.mainImage" [showContent]="false"
+                        <app-upload-image [imageSrc]="travelPosition.mainImage"
                           (imageUploaded)="onImageUpload($event, travelPosition)"></app-upload-image>
                       </div>
                     </div>
