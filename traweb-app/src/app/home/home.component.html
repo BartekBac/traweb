@@ -1,9 +1,13 @@
 <p-panel>
   <p-header>
-      {{currentUser.firstName}}, welcome to traweb!
+    <b>{{currentUser.firstName}}, welcome to traweb!</b>
   </p-header>
-  Body Content
-  <p-footer>
-      Footer content here
-  </p-footer>
+  <div class="p-grid">
+    <div class="p-col-6">Country: {{ currentUser.country }}</div>
+    <div class="p-col-6">Joined: {{ currentUser.dateJoined | date:'dd MMMM yyyy' }}</div>
+    <div class="p-col-6">City: {{ currentUser.city }}</div>
+    <div class="p-col-6">Last login: {{ currentUser.lastLogin | date:'dd MMMM yyyy hh:mm a' }}</div>
+  </div>
 </p-panel>
+
+<app-explore-travels [friends]="true"> </app-explore-travels>

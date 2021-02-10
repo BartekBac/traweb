@@ -23,7 +23,7 @@ export class TravelMapper {
   public static getCamelCase(travelRaw: TravelDTO): Travel {
     const travel: Travel = {
       id: travelRaw.id,
-      user: Number.isNaN(travelRaw.user) ? UserMapper.getCamelCase((travelRaw.user as UserDTO)) : (travelRaw.user as number),
+      user: typeof travelRaw.user === 'object' ? UserMapper.getCamelCase((travelRaw.user as UserDTO)) : (travelRaw.user as number),
       name: travelRaw.name,
       beginDate: travelRaw.begin_date,
       endDate: travelRaw.end_date,

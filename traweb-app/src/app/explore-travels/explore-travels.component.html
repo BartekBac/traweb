@@ -4,9 +4,15 @@
   </p-header>
 </p-panel>
 
-<p-panel class="m-panel" *ngIf="!my">
+<p-panel class="m-panel" *ngIf="!my && !friends">
   <p-header>
     <b>Other users travels</b>
+  </p-header>
+</p-panel>
+
+<p-panel class="m-panel" *ngIf="friends">
+  <p-header>
+    <b>My friends travels</b>
   </p-header>
 </p-panel>
 
@@ -34,20 +40,16 @@
             <div class="p-col-12">
               <p-tabView>
                 <p-tabPanel header="Images">
-                  <p-galleria *ngIf="position.pictures.length > 0" [(value)]="position.pictures" [containerStyle]="{'max-width': '640px'}" [numVisible]="5"
+                  <div *ngIf="getPictures(position).length > 0">
+                    <p-galleria [value]="getPictures(position)" [numVisible]="5"
                     [circular]="true" [showItemNavigators]="true" [showThumbnails]="false">
-                    <ng-template pTemplate="item" let-item>
-                      <img [src]="item" style="width: 100%; display: block;" />
-                    </ng-template>
-                    <ng-template pTemplate="thumbnail" let-item>
-                      <div class="p-grid p-nogutter p-justify-center">
-                        <img [src]="item" style="display: block;" />
-                      </div>
-                    </ng-template>
-                  </p-galleria>
+                      <ng-template pTemplate="item" let-item>
+                        <img [src]="item" style="width: 100%; display: block;" />
+                      </ng-template>
+                    </p-galleria>
+                  </div>
                 </p-tabPanel>
                 <p-tabPanel header="Details">
-                  <!-- <app-map-view [(markers)]="position.coordinates" [width]="200" [height]="150"></app-map-view> -->
                   {{ getCountryName(position.countryCode) }} - {{ position.city }}
                 </p-tabPanel>
                 <p-tabPanel header="Description">
