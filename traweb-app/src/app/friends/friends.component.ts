@@ -23,8 +23,7 @@ export class FriendsComponent implements OnInit {
 
     this.userService.updateCurrentUser(userToUpdate).subscribe(
       res => setTimeout(() => this.toastService.add({severity: 'success', summary: 'You have a new friend!', life: 2000}), 1000),
-      err => this.toastService.add({severity: 'error', summary: 'Failed to add a friend.', detail: err, life: 20000, closable: true}),
-      () => setTimeout(() => this.toastService.add({severity: 'success', summary: 'You have a new friend!', life: 2000}), 1000),
+      err => this.toastService.add({severity: 'error', summary: 'Failed to add a friend.', detail: err, life: 20000, closable: true})
     );
   }
 
