@@ -51,7 +51,7 @@ export class UserService {
   }
 
   updateCurrentUser(user: User): Observable<User> {
-    return this.http.put<UserDTO>(this.baseUrl + user.id + '/', user)
+    return this.http.put<UserDTO>(this.baseUrl + user.id + '/', UserMapper.getSnakeCase(user))
       .pipe(
         map(res => UserMapper.getCamelCase(res)),
         catchError(error => {
