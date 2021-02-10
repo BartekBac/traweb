@@ -32,9 +32,9 @@ class TravelViewset(viewsets.ModelViewSet):
     serializer_class = TravelSerializer
 
     def get_permissions(self):
-        if self.request.method == 'GET':
+        if self.request.method in ['GET', 'PUT']:
             self.permission_classes = (IsAuthenticated,)
-        elif self.request.method in ['POST', 'PATCH', 'PUT']:
+        elif self.request.method in ['POST', 'PATCH']:
             self.permission_classes = (IsOwnedTravel,)
 
         return super(TravelViewset, self).get_permissions()

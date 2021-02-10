@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { TravelService } from 'src/app/services/travel.service';
+import { UserService } from 'src/app/services/user.service';
 import { CountriesService } from '../services/countries.service';
 import { Opinion } from '../models/Opinion';
 import { Travel } from '../models/Travel';
 import { User } from '../models/User';
+import { TravelPosition } from '../models/TravelPosition';
 
 @Component({
   selector: 'app-explore-travels',
@@ -13,6 +15,7 @@ import { User } from '../models/User';
   styleUrls: ['./explore-travels.component.css']
 })
 export class ExploreTravelsComponent implements OnInit {
+  @Input() friends = false;
   travels: Travel[];
   currentUser: User;
   my: boolean;
@@ -20,11 +23,13 @@ export class ExploreTravelsComponent implements OnInit {
   display: boolean;
   opinion: Opinion;
   travelId: number;
+  friendsIds: number[];
   constructor(
     private travelService: TravelService,
     private route: ActivatedRoute,
     private countriesService: CountriesService,
     private toastService: MessageService,
+    private userService: UserService,
   ) {}
 
   ngOnInit(): void {
@@ -39,10 +44,20 @@ export class ExploreTravelsComponent implements OnInit {
         res => this.travels = res.filter(travel => (travel.user as User).id === this.currentUser.id)
       );
     }
+    else if (this.friends) {
+      this.travelService.getTravels().subscribe(
+        res => {
+          const userFriends = this.currentUser.friends.length > 0 ? this.currentUser.friends.split(',') : [];
+          this.travels = res.filter(travel => userFriends.includes((travel.user as User).id.toString()));
+      });
+    }
     else {
       this.travelService.getTravels().subscribe(
-        res => this.travels = res.filter(travel => (travel.user as User).id !== this.currentUser.id)
-      );
+        res => {
+          const userFriends = this.currentUser.friends.length > 0 ? this.currentUser.friends.split(',') : [];
+          this.travels = res.filter(travel => !userFriends.includes((travel.user as User).id.toString())
+            && (travel.user as User).id !== this.currentUser.id);
+      });
     }
   }
 
@@ -71,5 +86,18 @@ export class ExploreTravelsComponent implements OnInit {
 
   getUser(user: User | number | undefined): User {
     return user as User;
+  }
+
+  getPictures(position: TravelPosition): any[] {
+    const pictures: string[] = [];
+    if (position.mainImage !== '') {
+      pictures.push(position.mainImage as string);
+    }
+    position.pictures?.forEach(pic => {
+      if (pic !== '') {
+        pictures.push(pic as string);
+      }
+    });
+    return pictures as any[];
   }
 }
