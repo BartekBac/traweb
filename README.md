@@ -119,3 +119,24 @@ Endpoints are arranged in 3 controllers:
  - DELETE  *api/travels/{id}* 
 	 - deletes travel with specific id
     - *permission*: Owner
+    
+## Dockerization
+
+Both traweb system components - Django API and Angular presentation app are designed to be run in Docker containers. 
+In main directory of both projects, the Dockerfile has been added which is defining the process and required images to run application.
+
+In main directory of repository is located docker-dompose file which is orchestrating the startup of whole app and is using Dockerfiles explained earlier.
+
+## Requirements and application start-up
+
+Thanks to the docker technology only one requirement to run traweb system is to have docker installed on machine.
+There are two steps to run application:
+
+From the main repository directory run:
+
+`docker-compose build`
+
+`docker-compose up`
+
+After using that commands application should be running on localhost 8080 port.
+
